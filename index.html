@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse - New Tab</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .pulse-card {
+            background: #1e293b;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 { margin: 0 0 0.5rem 0; font-size: 2.5rem; color: #38bdf8; }
+        p { color: #94a3b8; margin-bottom: 1.5rem; }
+        .search-box {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pulse-card">
+        <!-- JavaScript Feature 1: Live Clock -->
+        <h1 id="clock">00:00:00</h1>
+        <p id="greeting">Welcome back, Developer.</p>
+        
+        <!-- JavaScript Feature 2: Quick Search Widget -->
+        <input type="text" class="search-box" id="search" placeholder="Search Google or type a URL..." autofocus>
+    </div>
+
+    <script>
+        // Update live clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Dynamic greeting based on time of day
+        const hours = new Date().getHours();
+        let greetText = "Hello!";
+        if (hours < 12) greetText = "Good morning, creator ☀️";
+        else if (hours < 18) greetText = "Good afternoon, creator 🌤️";
+        else greetText = "Good evening, creator 🌙";
+        document.getElementById('greeting').innerText = greetText;
+
+        // Simple search redirect feature
+        const searchInput = document.getElementById('search');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = searchInput.value;
+                if(query.startsWith('http://') || query.startsWith('https://')) {
+                    window.location.href = query;
+                } else {
+                    window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
