@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -8,55 +10,45 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="description"
-        content="WebPulse — a minimal futuristic new tab experience."
-    >
+    <title>Gudov</title>
 
-    <title>WebPulse</title>
 
-    <!-- Inter -->
+    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet"
     >
 
-    <!-- Lucide Icons -->
+
+    <!-- Icons -->
+
     <script src="https://unpkg.com/lucide@latest"></script>
 
 
     <style>
 
-        /* =========================================================
-           VARIABLES
-        ========================================================= */
+        /* =====================================================
+           CORE
+        ===================================================== */
 
         :root {
-            --background: #030711;
-            --panel: rgba(7, 15, 29, 0.72);
-            --panel-solid: #07101e;
 
-            --border: rgba(148, 163, 184, 0.13);
-            --border-hover: rgba(56, 189, 248, 0.42);
+            --blue: #5dbbff;
+            --blue-soft: rgba(93, 187, 255, 0.35);
 
-            --blue: #38bdf8;
-            --blue-bright: #60a5fa;
-            --purple: #818cf8;
+            --white: #edf6ff;
+            --muted: #8394a8;
+            --dim: #425163;
 
-            --text: #f1f5f9;
-            --muted: #7f91aa;
-            --dim: #46566d;
+            --line: rgba(145, 177, 207, 0.14);
 
-            --radius: 18px;
+            --panel: rgba(3, 10, 18, 0.68);
+
         }
 
-
-        /* =========================================================
-           RESET
-        ========================================================= */
 
         * {
             box-sizing: border-box;
@@ -64,254 +56,965 @@
             padding: 0;
         }
 
-        html {
-            height: 100%;
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
         }
 
+
         body {
-            min-height: 100%;
-            background: var(--background);
-            color: var(--text);
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(2, 7, 14, .62),
+                    rgba(2, 7, 14, .20),
+                    rgba(2, 7, 14, .55)
+                ),
+
+                linear-gradient(
+                    0deg,
+                    rgba(2, 7, 14, .78),
+                    transparent 55%,
+                    rgba(2, 7, 14, .25)
+                ),
+
+                url("assets/background.jpg");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            color: var(--white);
 
             font-family:
                 "Inter",
                 system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
                 sans-serif;
 
             overflow-x: hidden;
         }
 
 
-        /* =========================================================
-           SPACE BACKGROUND
-        ========================================================= */
+        /* =====================================================
+           AMBIENT LAYER
+        ===================================================== */
 
-        .space {
+        .noise {
+
             position: fixed;
+
             inset: 0;
 
-            z-index: -5;
+            pointer-events: none;
 
-            background:
-                radial-gradient(
-                    ellipse at 50% 55%,
-                    rgba(25, 70, 130, 0.18),
-                    transparent 48%
-                ),
+            z-index: 20;
 
-                radial-gradient(
-                    ellipse at 15% 25%,
-                    rgba(56, 189, 248, 0.08),
-                    transparent 35%
-                ),
-
-                radial-gradient(
-                    ellipse at 85% 75%,
-                    rgba(99, 102, 241, 0.09),
-                    transparent 40%
-                ),
-
-                #030711;
-        }
-
-
-        /* Stars */
-
-        .space::before {
-            content: "";
-
-            position: absolute;
-            inset: 0;
-
-            opacity: 0.38;
+            opacity: .035;
 
             background-image:
-                radial-gradient(
-                    circle,
-                    rgba(255,255,255,.8) 1px,
-                    transparent 1px
-                );
-
-            background-size: 150px 150px;
-
-            background-position:
-                20px 30px;
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
         }
 
 
-        /* Nebula */
+        /* =====================================================
+           SCAN LINE
+        ===================================================== */
 
-        .nebula {
-            position: absolute;
+        .scanline {
 
-            width: 700px;
-            height: 400px;
+            position: fixed;
 
-            left: 50%;
-            bottom: -100px;
+            left: 0;
+            right: 0;
 
-            transform: translateX(-50%);
+            height: 1px;
+
+            top: -10px;
 
             background:
-                radial-gradient(
-                    ellipse,
-                    rgba(37, 99, 235, .17),
-                    transparent 68%
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(93,187,255,.25),
+                    transparent
                 );
 
-            filter: blur(30px);
+            box-shadow:
+                0 0 14px rgba(93,187,255,.18);
+
+            pointer-events: none;
+
+            z-index: 19;
+
+            animation:
+                scan 9s linear infinite;
+        }
+
+
+        @keyframes scan {
+
+            0% {
+                top: -10px;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: .5;
+            }
+
+            90% {
+                opacity: .5;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+
+        }
+
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .top {
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 30px;
+
+            border-bottom:
+                1px solid var(--line);
+
+            background:
+                rgba(2, 7, 13, .52);
+
+            backdrop-filter:
+                blur(14px);
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-size: 17px;
+
+            font-weight: 500;
+
+            letter-spacing: -.03em;
+        }
+
+
+        .brand-line {
+
+            width: 22px;
+
+            height: 1px;
+
+            background:
+                var(--blue);
+
+            box-shadow:
+                0 0 9px var(--blue);
+        }
+
+
+        .brand small {
+
+            color: var(--dim);
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 9px;
+
+            margin-left: 4px;
+
+            letter-spacing: .12em;
+        }
+
+
+        .top-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            color: var(--dim);
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 10px;
+
+            letter-spacing: .08em;
+        }
+
+
+        .connection {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+        }
+
+
+        .connection-dot {
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #65d6a1;
+
+            box-shadow:
+                0 0 9px #65d6a1;
+
+            animation:
+                pulse 2s ease-in-out infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: .45;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        main {
+
+            position: relative;
+
+            width:
+                min(1180px, calc(100% - 70px));
+
+            min-height:
+                calc(100vh - 132px);
+
+            margin: auto;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        /* =====================================================
+           LITTLE TECH MARKERS
+        ===================================================== */
+
+        .marker {
+
+            position: absolute;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: rgba(166, 194, 219, .38);
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+
+            letter-spacing: .13em;
+
+            text-transform: uppercase;
 
             pointer-events: none;
         }
 
 
-        /* =========================================================
-           TOP NAVIGATION
-        ========================================================= */
+        .marker::before {
 
-        header {
-            height: 78px;
+            content: "";
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            width: 18px;
 
-            padding: 0 38px;
-
-            border-bottom: 1px solid var(--border);
+            height: 1px;
 
             background:
-                rgba(2, 7, 17, 0.62);
-
-            backdrop-filter: blur(20px);
+                var(--blue-soft);
         }
 
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-
-            font-size: 1.18rem;
-            font-weight: 600;
-
-            letter-spacing: -0.03em;
+        .marker.one {
+            top: 16%;
+            left: 0;
         }
 
 
-        .brand-mark {
-            width: 30px;
-            height: 30px;
-
-            display: grid;
-            place-items: center;
-
-            border: 1px solid rgba(56,189,248,.5);
-
-            border-radius: 8px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(56,189,248,.2),
-                    rgba(129,140,248,.1)
-                );
-
-            box-shadow:
-                0 0 20px rgba(56,189,248,.12);
+        .marker.two {
+            right: 0;
+            top: 25%;
         }
 
 
-        .brand-mark i {
-            width: 8px;
-            height: 8px;
-
-            border-radius: 50%;
-
-            background: var(--blue);
-
-            box-shadow:
-                0 0 12px var(--blue);
+        .marker.three {
+            left: 4%;
+            bottom: 13%;
         }
 
 
-        .brand span {
-            color: #e2e8f0;
-        }
+        /* =====================================================
+           CLOCK
+        ===================================================== */
 
+        .clock-block {
 
-        .brand strong {
-            color: var(--blue);
-            font-weight: 600;
-        }
-
-
-        /* Navigation */
-
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-
-        .nav a {
             position: relative;
 
-            color: var(--muted);
+            width: fit-content;
+
+            margin-left:
+                clamp(0px, 8vw, 100px);
+
+            margin-bottom: 42px;
+        }
+
+
+        .clock-label {
+
+            margin-bottom: 9px;
+
+            color: var(--blue);
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 9px;
+
+            letter-spacing: .25em;
+
+            text-transform: uppercase;
+
+            opacity: .8;
+        }
+
+
+        #clock {
+
+            font-size:
+                clamp(5rem, 11vw, 9rem);
+
+            line-height: .8;
+
+            font-weight: 300;
+
+            letter-spacing: -.075em;
+
+            color: var(--white);
+
+            text-shadow:
+                0 0 40px rgba(93,187,255,.08);
+        }
+
+
+        #date {
+
+            margin-top: 20px;
+
+            color: #8192a7;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 10px;
+
+            letter-spacing: .18em;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-area {
+
+            width:
+                min(760px, 100%);
+
+            margin-left:
+                clamp(0px, 16vw, 190px);
+
+            position: relative;
+        }
+
+
+        .search-shell {
+
+            height: 62px;
+
+            display: flex;
+
+            align-items: center;
+
+            position: relative;
+
+            border:
+                1px solid
+                rgba(150,190,225,.23);
+
+            background:
+                rgba(2, 8, 16, .70);
+
+            backdrop-filter:
+                blur(18px);
+
+            transition:
+                border-color .25s,
+                box-shadow .25s;
+        }
+
+
+        /* Corner details */
+
+        .search-shell::before,
+        .search-shell::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 10px;
+            height: 10px;
+
+            pointer-events: none;
+        }
+
+
+        .search-shell::before {
+
+            top: -1px;
+            left: -1px;
+
+            border-top:
+                1px solid var(--blue);
+
+            border-left:
+                1px solid var(--blue);
+        }
+
+
+        .search-shell::after {
+
+            right: -1px;
+            bottom: -1px;
+
+            border-right:
+                1px solid var(--blue);
+
+            border-bottom:
+                1px solid var(--blue);
+        }
+
+
+        .search-shell:focus-within {
+
+            border-color:
+                rgba(93,187,255,.55);
+
+            box-shadow:
+                0 0 30px
+                rgba(93,187,255,.08);
+        }
+
+
+        .search-icon {
+
+            width: 18px;
+
+            margin:
+                0 15px 0 19px;
+
+            color:
+                var(--blue);
+
+            opacity: .75;
+        }
+
+
+        #search {
+
+            flex: 1;
+
+            height: 100%;
+
+            border: 0;
+            outline: 0;
+
+            background:
+                transparent;
+
+            color: var(--white);
+
+            font-family:
+                "Inter",
+                sans-serif;
+
+            font-size: 14px;
+        }
+
+
+        #search::placeholder {
+            color: #5d7085;
+        }
+
+
+        .engine {
+
+            height: 34px;
+
+            padding:
+                0 10px;
+
+            margin-right: 8px;
+
+            border:
+                1px solid var(--line);
+
+            border-radius: 4px;
+
+            background:
+                rgba(8,17,29,.8);
+
+            color: #8ca0b5;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 9px;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        .engine option {
+
+            background: #07101b;
+
+            color: white;
+        }
+
+
+        .search-button {
+
+            width: 42px;
+            height: 42px;
+
+            margin-right: 9px;
+
+            display: grid;
+
+            place-items: center;
+
+            border: 1px solid
+                rgba(93,187,255,.25);
+
+            background:
+                rgba(93,187,255,.07);
+
+            color:
+                var(--blue);
+
+            cursor: pointer;
+
+            transition:
+                background .2s,
+                border-color .2s,
+                transform .2s;
+        }
+
+
+        .search-button:hover {
+
+            background:
+                rgba(93,187,255,.15);
+
+            border-color:
+                rgba(93,187,255,.55);
+
+            transform:
+                translateX(2px);
+        }
+
+
+        /* =====================================================
+           QUICK ACCESS
+        ===================================================== */
+
+        .quick {
+
+            width:
+                min(760px, 100%);
+
+            margin-left:
+                clamp(0px, 16vw, 190px);
+
+            margin-top: 25px;
+        }
+
+
+        .quick-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 10px;
+
+            color: #60738a;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+
+            letter-spacing: .2em;
+
+            text-transform: uppercase;
+        }
+
+
+        .quick-header span {
+
+            width: 25px;
+
+            height: 1px;
+
+            background:
+                var(--line);
+        }
+
+
+        .links {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            border-top:
+                1px solid var(--line);
+
+            border-left:
+                1px solid var(--line);
+        }
+
+
+        .link {
+
+            position: relative;
+
+            min-height: 86px;
+
+            padding:
+                17px 18px;
+
+            border-right:
+                1px solid var(--line);
+
+            border-bottom:
+                1px solid var(--line);
+
+            background:
+                rgba(3,10,18,.42);
+
+            color: var(--white);
 
             text-decoration: none;
 
-            font-size: .84rem;
+            overflow: hidden;
 
-            transition: color .2s ease;
+            transition:
+                background .25s,
+                border-color .25s;
         }
 
 
-        .nav a:hover,
-        .nav a.active {
-            color: var(--text);
+        .link:hover {
+
+            background:
+                rgba(5,18,31,.70);
+
+            border-color:
+                rgba(93,187,255,.3);
         }
 
 
-        .nav a.active::after {
+        /* Animated technical line */
+
+        .link::before {
+
             content: "";
 
             position: absolute;
 
             left: 0;
-            right: 0;
+            bottom: 0;
 
-            bottom: -29px;
+            width: 0;
+            height: 1px;
 
-            height: 2px;
-
-            background: var(--blue);
+            background:
+                var(--blue);
 
             box-shadow:
-                0 0 12px rgba(56,189,248,.7);
+                0 0 8px
+                rgba(93,187,255,.5);
+
+            transition:
+                width .35s ease;
         }
 
 
-        .settings {
-            width: 36px;
-            height: 36px;
+        .link:hover::before {
+            width: 100%;
+        }
+
+
+        /* Number */
+
+        .link-number {
+
+            position: absolute;
+
+            right: 10px;
+            top: 8px;
+
+            color: #33465b;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+        }
+
+
+        .link-icon {
+
+            width: 20px;
+
+            color: #8297ae;
+
+            margin-bottom: 13px;
+
+            transition:
+                color .25s,
+                transform .25s;
+        }
+
+
+        .link:hover .link-icon {
+
+            color:
+                var(--blue);
+
+            transform:
+                translateY(-2px)
+                scale(1.12);
+        }
+
+
+        .link-name {
+
+            font-size: 12px;
+
+            font-weight: 500;
+        }
+
+
+        .link-url {
+
+            margin-top: 4px;
+
+            color: #52667c;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+        }
+
+
+        .link-arrow {
+
+            position: absolute;
+
+            right: 12px;
+            bottom: 10px;
+
+            width: 12px;
+
+            color: #465b72;
+
+            opacity: 0;
+
+            transform:
+                translate(-4px, 4px);
+
+            transition:
+                opacity .2s,
+                transform .2s;
+        }
+
+
+        .link:hover .link-arrow {
+
+            opacity: 1;
+
+            color:
+                var(--blue);
+
+            transform:
+                translate(0,0);
+        }
+
+
+        /* =====================================================
+           BOTTOM DATA
+        ===================================================== */
+
+        .bottom-data {
+
+            position: fixed;
+
+            bottom: 20px;
+
+            left: 30px;
+            right: 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            color: #43566c;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+
+            letter-spacing: .12em;
+
+            z-index: 5;
+        }
+
+
+        .bottom-left,
+        .bottom-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .separator {
+
+            width: 18px;
+
+            height: 1px;
+
+            background:
+                var(--line);
+        }
+
+
+        /* =====================================================
+           SETTINGS DRAWER
+        ===================================================== */
+
+        .settings-button {
+
+            position: fixed;
+
+            right: 26px;
+            top: 87px;
+
+            width: 38px;
+            height: 38px;
 
             display: grid;
+
             place-items: center;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--line);
 
-            border-radius: 9px;
+            background:
+                rgba(3,10,18,.55);
 
-            background: transparent;
-
-            color: var(--muted);
+            color:
+                #71859b;
 
             cursor: pointer;
+
+            z-index: 30;
 
             transition:
                 color .2s,
@@ -320,741 +1023,622 @@
         }
 
 
-        .settings:hover {
-            color: var(--blue);
-            border-color: var(--border-hover);
+        .settings-button:hover {
 
-            transform: rotate(15deg);
+            color:
+                var(--blue);
+
+            border-color:
+                rgba(93,187,255,.4);
+
+            transform:
+                rotate(20deg);
         }
 
 
-        /* =========================================================
-           MAIN
-        ========================================================= */
+        .drawer {
 
-        main {
-            width: min(1120px, calc(100% - 60px));
+            position: fixed;
 
-            margin: 0 auto;
+            right: 0;
+            top: 0;
+            bottom: 0;
 
-            min-height:
-                calc(100vh - 140px);
+            width:
+                min(360px, 90vw);
 
-            display: flex;
-            flex-direction: column;
-
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        /* =========================================================
-           CLOCK
-        ========================================================= */
-
-        .clock-area {
-            text-align: center;
-
-            margin-top: -20px;
-
-            margin-bottom: 48px;
-        }
-
-
-        #clock {
-            font-size: clamp(4.5rem, 10vw, 7.5rem);
-
-            line-height: .9;
-
-            font-weight: 300;
-
-            letter-spacing: -.065em;
-
-            color: #e8f1ff;
-
-            text-shadow:
-                0 0 45px rgba(96,165,250,.12);
-        }
-
-
-        .date {
-            margin-top: 22px;
-
-            color: #71839b;
-
-            font-size: .82rem;
-
-            letter-spacing: .22em;
-
-            text-transform: uppercase;
-        }
-
-
-        .status-line {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            gap: 14px;
-
-            margin-top: 20px;
-
-            color: var(--muted);
-
-            font-size: .72rem;
-
-            letter-spacing: .3em;
-
-            text-transform: uppercase;
-        }
-
-
-        .status-line::before,
-        .status-line::after {
-            content: "";
-
-            width: 55px;
-            height: 1px;
+            padding: 30px;
 
             background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(56,189,248,.4)
-                );
-        }
+                rgba(3,9,17,.96);
 
+            border-left:
+                1px solid var(--line);
 
-        .status-line::after {
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(56,189,248,.4),
-                    transparent
-                );
-        }
+            backdrop-filter:
+                blur(25px);
 
+            z-index: 40;
 
-        /* =========================================================
-           SEARCH
-        ========================================================= */
-
-        .search-wrapper {
-            width: min(760px, 100%);
-
-            position: relative;
-        }
-
-
-        .search-box {
-            width: 100%;
-            height: 68px;
-
-            display: flex;
-            align-items: center;
-
-            padding: 0 9px 0 22px;
-
-            border: 1px solid rgba(56,189,248,.28);
-
-            border-radius: 20px;
-
-            background:
-                rgba(3, 10, 23, .82);
-
-            backdrop-filter: blur(20px);
-
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,.015),
-                0 18px 50px rgba(0,0,0,.35);
+            transform:
+                translateX(100%);
 
             transition:
-                border-color .25s,
-                box-shadow .25s;
+                transform .35s
+                cubic-bezier(.16,1,.3,1);
         }
 
 
-        .search-box:focus-within {
-            border-color: rgba(56,189,248,.75);
+        .drawer.open {
 
-            box-shadow:
-                0 0 30px rgba(56,189,248,.12),
-                0 20px 55px rgba(0,0,0,.45);
+            transform:
+                translateX(0);
         }
 
 
-        .search-icon {
-            width: 21px;
-
-            color: var(--blue);
-
-            margin-right: 16px;
-        }
-
-
-        #search {
-            flex: 1;
-
-            height: 100%;
-
-            border: 0;
-            outline: 0;
-
-            background: transparent;
-
-            color: var(--text);
-
-            font-family: inherit;
-
-            font-size: 1rem;
-        }
-
-
-        #search::placeholder {
-            color: #50627a;
-        }
-
-
-        .engine {
-            height: 44px;
+        .drawer-header {
 
             display: flex;
+
+            justify-content:
+                space-between;
+
             align-items: center;
 
-            gap: 9px;
+            padding-bottom: 20px;
 
-            padding: 0 14px;
+            border-bottom:
+                1px solid var(--line);
 
-            border: 1px solid var(--border);
-
-            border-radius: 12px;
-
-            background: rgba(8,18,34,.8);
-
-            color: #a9bad0;
-
-            font-size: .78rem;
-
-            cursor: pointer;
-
-            outline: none;
+            margin-bottom: 28px;
         }
 
 
-        .engine:focus {
-            border-color: var(--border-hover);
+        .drawer-title {
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 10px;
+
+            letter-spacing: .2em;
+
+            color:
+                var(--blue);
         }
 
 
-        .engine option {
-            background: #07101e;
-            color: white;
-        }
+        .close-settings {
 
-
-        .search-button {
-            width: 48px;
-            height: 48px;
+            width: 30px;
+            height: 30px;
 
             display: grid;
+
             place-items: center;
 
-            margin-left: 8px;
-
-            border: 0;
-
-            border-radius: 14px;
-
             background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #38bdf8
-                );
+                transparent;
 
-            color: white;
+            border:
+                1px solid var(--line);
+
+            color:
+                var(--muted);
 
             cursor: pointer;
-
-            box-shadow:
-                0 0 20px rgba(56,189,248,.2);
-
-            transition:
-                transform .2s,
-                box-shadow .2s;
         }
 
 
-        .search-button:hover {
-            transform: translateX(2px);
+        .setting-group {
 
-            box-shadow:
-                0 0 30px rgba(56,189,248,.35);
+            margin-bottom: 30px;
         }
 
 
-        /* =========================================================
-           QUICK ACCESS
-        ========================================================= */
+        .setting-label {
 
-        .section-label {
-            display: flex;
-            align-items: center;
+            margin-bottom: 13px;
 
-            gap: 16px;
+            color:
+                #52667b;
 
-            margin-top: 58px;
-            margin-bottom: 22px;
+            font-family:
+                "JetBrains Mono",
+                monospace;
 
-            color: #53657d;
+            font-size: 8px;
 
-            font-size: .67rem;
-
-            letter-spacing: .35em;
+            letter-spacing: .2em;
 
             text-transform: uppercase;
         }
 
 
-        .section-label::before,
-        .section-label::after {
-            content: "";
-
-            width: 70px;
-            height: 1px;
-
-            background: var(--border);
-        }
-
-
-        .shortcuts {
-            width: min(850px, 100%);
+        .theme-buttons {
 
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                repeat(3,1fr);
 
-            gap: 14px;
-        }
-
-
-        .shortcut {
-            position: relative;
-
-            min-height: 135px;
-
-            padding: 20px;
-
-            overflow: hidden;
-
-            border: 1px solid var(--border);
-
-            border-radius: 16px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(10,21,38,.75),
-                    rgba(3,10,20,.72)
-                );
-
-            text-decoration: none;
-
-            color: var(--text);
-
-            backdrop-filter: blur(15px);
-
-            transition:
-                transform .25s ease,
-                border-color .25s ease,
-                background .25s ease;
-        }
-
-
-        .shortcut:hover {
-            transform: translateY(-5px);
-
-            border-color:
-                rgba(56,189,248,.4);
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(13,31,53,.9),
-                    rgba(3,12,24,.85)
-                );
-        }
-
-
-        /* Vertical glow line */
-
-        .shortcut::before {
-            content: "";
-
-            position: absolute;
-
-            left: 0;
-            top: 18px;
-            bottom: 18px;
-
-            width: 2px;
-
-            background: var(--accent);
-
-            box-shadow:
-                0 0 14px var(--accent);
-
-            opacity: .75;
-
-            transition:
-                top .25s,
-                bottom .25s,
-                opacity .25s;
-        }
-
-
-        .shortcut:hover::before {
-            top: 8px;
-            bottom: 8px;
-            opacity: 1;
-        }
-
-
-        /* Icon */
-
-        .shortcut-icon {
-            width: 38px;
-            height: 38px;
-
-            display: grid;
-            place-items: center;
-
-            margin-bottom: 18px;
-
-            border: 1px solid rgba(255,255,255,.08);
-
-            border-radius: 11px;
-
-            background: rgba(255,255,255,.025);
-
-            color: #8295ad;
-
-            transition:
-                color .25s,
-                border-color .25s,
-                transform .25s,
-                box-shadow .25s;
-        }
-
-
-        .shortcut:hover .shortcut-icon {
-            color: var(--accent);
-
-            border-color:
-                color-mix(
-                    in srgb,
-                    var(--accent) 45%,
-                    transparent
-                );
-
-            transform:
-                translateY(-3px)
-                scale(1.08);
-
-            box-shadow:
-                0 0 20px
-                color-mix(
-                    in srgb,
-                    var(--accent) 18%,
-                    transparent
-                );
-        }
-
-
-        .shortcut-name {
-            font-size: .9rem;
-
-            font-weight: 500;
-        }
-
-
-        .shortcut-description {
-            margin-top: 6px;
-
-            color: #53657d;
-
-            font-size: .7rem;
-        }
-
-
-        .shortcut-arrow {
-            position: absolute;
-
-            right: 17px;
-            bottom: 16px;
-
-            color: #40526b;
-
-            opacity: 0;
-
-            transform:
-                translate(-5px, 5px);
-
-            transition:
-                opacity .25s,
-                transform .25s,
-                color .25s;
-        }
-
-
-        .shortcut:hover .shortcut-arrow {
-            opacity: 1;
-
-            color: var(--accent);
-
-            transform: translate(0,0);
-        }
-
-
-        /* =========================================================
-           LOWER INFO
-        ========================================================= */
-
-        .info-row {
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 25px;
-
-            margin-top: 45px;
-
-            color: #3f5168;
-
-            font-size: .68rem;
-
-            letter-spacing: .05em;
-        }
-
-
-        .online {
-            display: flex;
-            align-items: center;
             gap: 7px;
         }
 
 
-        .online-dot {
-            width: 6px;
-            height: 6px;
+        .theme-button {
 
-            border-radius: 50%;
+            height: 50px;
 
-            background: #34d399;
+            border:
+                1px solid var(--line);
 
-            box-shadow:
-                0 0 10px rgba(52,211,153,.7);
+            background:
+                #07101b;
+
+            color:
+                #71859b;
+
+            cursor: pointer;
+
+            font-family:
+                "JetBrains Mono",
+                monospace;
+
+            font-size: 8px;
+
+            transition:
+                border-color .2s,
+                color .2s;
         }
 
 
-        /* =========================================================
-           FOOTER
-        ========================================================= */
+        .theme-button:hover,
+        .theme-button.selected {
 
-        footer {
-            height: 62px;
+            border-color:
+                rgba(93,187,255,.45);
+
+            color:
+                var(--blue);
+        }
+
+
+        .toggle-row {
 
             display: flex;
+
             align-items: center;
-            justify-content: center;
 
-            color: #33445a;
+            justify-content: space-between;
 
-            font-size: .68rem;
+            padding:
+                13px 0;
 
-            letter-spacing: .08em;
-
-            border-top: 1px solid rgba(148,163,184,.05);
+            border-bottom:
+                1px solid rgba(145,177,207,.07);
         }
 
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
+        .toggle-name {
 
-        @media (max-width: 850px) {
+            color:
+                #a1b0c0;
 
-            header {
-                padding: 0 20px;
+            font-size: 11px;
+        }
+
+
+        .toggle {
+
+            position: relative;
+
+            width: 32px;
+            height: 17px;
+
+            border:
+                1px solid #334457;
+
+            background:
+                #0b1420;
+
+            cursor: pointer;
+
+            transition:
+                background .2s,
+                border-color .2s;
+        }
+
+
+        .toggle::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 9px;
+            height: 9px;
+
+            left: 3px;
+            top: 3px;
+
+            background:
+                #607389;
+
+            transition:
+                transform .2s,
+                background .2s;
+        }
+
+
+        .toggle.active {
+
+            border-color:
+                rgba(93,187,255,.5);
+
+            background:
+                rgba(93,187,255,.12);
+        }
+
+
+        .toggle.active::after {
+
+            transform:
+                translateX(15px);
+
+            background:
+                var(--blue);
+
+            box-shadow:
+                0 0 8px
+                rgba(93,187,255,.5);
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .top {
+                padding: 0 18px;
             }
 
-            .nav {
+            .top-right {
                 display: none;
             }
 
+            .settings-button {
+                top: 86px;
+                right: 18px;
+            }
+
             main {
-                width: min(
-                    100% - 32px,
-                    700px
-                );
+                width:
+                    calc(100% - 36px);
+
+                min-height:
+                    calc(100vh - 132px);
             }
 
-            .shortcuts {
+            .clock-block {
+                margin-left: 0;
+            }
+
+            .search-area,
+            .quick {
+                margin-left: 0;
+            }
+
+            .links {
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(2,1fr);
             }
 
-            #clock {
-                font-size:
-                    clamp(4rem, 16vw, 6rem);
+            .marker {
+                display: none;
+            }
+
+            .bottom-data {
+                left: 18px;
+                right: 18px;
             }
 
         }
 
 
-        @media (max-width: 560px) {
+        @media (max-width: 480px) {
 
-            .clock-area {
-                margin-bottom: 35px;
+            #clock {
+                font-size: 4.4rem;
             }
 
-            .search-box {
-                height: 62px;
-
-                padding-left: 16px;
+            .search-shell {
+                height: 58px;
             }
 
             .engine {
                 display: none;
             }
 
-            .search-button {
-                width: 44px;
-                height: 44px;
+            .links {
+                grid-template-columns:
+                    1fr 1fr;
             }
 
-            .shortcuts {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
+            .link {
+                min-height: 95px;
             }
 
-            .shortcut {
-                min-height: 120px;
-                padding: 16px;
-            }
-
-            .info-row {
+            .bottom-right {
                 display: none;
-            }
-
-            footer {
-                font-size: .6rem;
             }
 
         }
 
     </style>
+
 </head>
 
 
 <body>
 
-    <!-- =========================================================
-         SPACE BACKGROUND
-    ========================================================== -->
 
-    <div class="space">
-        <div class="nebula"></div>
-    </div>
+    <!-- Ambient effects -->
+
+    <div class="noise"></div>
+
+    <div class="scanline"></div>
 
 
-    <!-- =========================================================
+    <!-- =====================================================
          HEADER
-    ========================================================== -->
+    ====================================================== -->
 
-    <header>
+    <header class="top">
 
         <div class="brand">
 
-            <div class="brand-mark">
-                <i></i>
-            </div>
+            <span class="brand-line"></span>
 
-            <span>
-                Web<strong>Pulse</strong>
-            </span>
+            <span>Gudov</span>
+
+            <small>NEW TAB</small>
 
         </div>
 
 
-        <nav class="nav">
+        <div class="top-right">
 
-            <a href="#" class="active">
-                Home
-            </a>
+            <div class="connection">
 
-            <a href="#shortcuts">
-                Shortcuts
-            </a>
+                <span class="connection-dot"></span>
 
-            <a href="#">
-                Settings
-            </a>
+                LOCAL
 
-            <button
-                class="settings"
-                aria-label="Settings"
-            >
-                <i data-lucide="settings"></i>
-            </button>
+            </div>
 
-        </nav>
+            <span id="topTime">
+                --:--
+            </span>
+
+        </div>
 
     </header>
 
 
-    <!-- =========================================================
+    <!-- =====================================================
+         SETTINGS
+    ====================================================== -->
+
+    <button
+        class="settings-button"
+        id="settingsButton"
+        aria-label="Open settings"
+    >
+
+        <i data-lucide="sliders-horizontal"></i>
+
+    </button>
+
+
+    <aside
+        class="drawer"
+        id="settingsDrawer"
+    >
+
+        <div class="drawer-header">
+
+            <span class="drawer-title">
+                GUDOV / CONFIG
+            </span>
+
+            <button
+                class="close-settings"
+                id="closeSettings"
+            >
+
+                <i data-lucide="x"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- Appearance -->
+
+        <div class="setting-group">
+
+            <div class="setting-label">
+                Appearance
+            </div>
+
+
+            <div class="theme-buttons">
+
+                <button
+                    class="theme-button selected"
+                    data-theme="space"
+                >
+                    SPACE
+                </button>
+
+                <button
+                    class="theme-button"
+                    data-theme="midnight"
+                >
+                    DARK
+                </button>
+
+                <button
+                    class="theme-button"
+                    data-theme="blue"
+                >
+                    BLUE
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Clock -->
+
+        <div class="setting-group">
+
+            <div class="setting-label">
+                Clock
+            </div>
+
+
+            <div class="toggle-row">
+
+                <span class="toggle-name">
+                    24 hour
+                </span>
+
+                <button
+                    class="toggle active"
+                    id="formatToggle"
+                ></button>
+
+            </div>
+
+
+            <div class="toggle-row">
+
+                <span class="toggle-name">
+                    Seconds
+                </span>
+
+                <button
+                    class="toggle"
+                    id="secondsToggle"
+                ></button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Interface -->
+
+        <div class="setting-group">
+
+            <div class="setting-label">
+                Interface
+            </div>
+
+
+            <div class="toggle-row">
+
+                <span class="toggle-name">
+                    Scan animation
+                </span>
+
+                <button
+                    class="toggle active"
+                    id="scanToggle"
+                ></button>
+
+            </div>
+
+
+            <div class="toggle-row">
+
+                <span class="toggle-name">
+                    Ambient grain
+                </span>
+
+                <button
+                    class="toggle active"
+                    id="grainToggle"
+                ></button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
          MAIN
-    ========================================================== -->
+    ====================================================== -->
 
     <main>
 
 
-        <!-- CLOCK -->
+        <!-- Technical markers -->
 
-        <section class="clock-area">
+        <div class="marker one">
+            SYSTEM / 01
+        </div>
 
-            <h1 id="clock">
+        <div class="marker two">
+            NODE / ACTIVE
+        </div>
+
+        <div class="marker three">
+            GUDOV / 001
+        </div>
+
+
+        <!-- =================================================
+             CLOCK
+        ================================================== -->
+
+        <section class="clock-block">
+
+            <div class="clock-label">
+                Local time
+            </div>
+
+
+            <div id="clock">
                 00:00
-            </h1>
+            </div>
 
-            <p
-                class="date"
-                id="date"
-            >
-                Loading date...
-            </p>
 
-            <div class="status-line">
-                Explore. Create. Discover.
+            <div id="date">
+                Loading...
             </div>
 
         </section>
 
 
-        <!-- =====================================================
+        <!-- =================================================
              SEARCH
-        ====================================================== -->
+        ================================================== -->
 
         <form
-            class="search-wrapper"
+            class="search-area"
             id="searchForm"
         >
 
-            <div class="search-box">
+            <div class="search-shell">
 
                 <i
                     class="search-icon"
@@ -1065,34 +1649,33 @@
                 <input
                     id="search"
                     type="text"
-                    placeholder="Search the web, or enter a URL..."
+                    placeholder="Search the web or enter a URL..."
                     autocomplete="off"
                     spellcheck="false"
-                    aria-label="Search the web"
                     autofocus
                 >
 
 
                 <select
-                    id="engine"
                     class="engine"
+                    id="engine"
                     aria-label="Search engine"
                 >
 
                     <option value="google">
-                        Google
+                        GOOGLE
                     </option>
 
                     <option value="duckduckgo">
-                        DuckDuckGo
+                        DUCKDUCKGO
                     </option>
 
                     <option value="bing">
-                        Bing
+                        BING
                     </option>
 
                     <option value="youtube">
-                        YouTube
+                        YOUTUBE
                     </option>
 
                 </select>
@@ -1104,7 +1687,7 @@
                     aria-label="Search"
                 >
 
-                    <i data-lucide="arrow-right"></i>
+                    <i data-lucide="arrow-up-right"></i>
 
                 </button>
 
@@ -1113,200 +1696,252 @@
         </form>
 
 
-        <!-- =====================================================
-             SHORTCUTS
-        ====================================================== -->
+        <!-- =================================================
+             QUICK ACCESS
+        ================================================== -->
 
-        <div
-            class="section-label"
-            id="shortcuts"
-        >
-            Quick Access
-        </div>
+        <section class="quick">
 
+            <div class="quick-header">
 
-        <section class="shortcuts">
+                <span></span>
 
+                Pinned
 
-            <!-- GitHub -->
-
-            <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shortcut"
-                style="--accent:#f1f5f9;"
-            >
-
-                <div class="shortcut-icon">
-
-                    <i data-lucide="github"></i>
-
-                </div>
-
-                <div class="shortcut-name">
-                    GitHub
-                </div>
-
-                <div class="shortcut-description">
-                    Build. Share. Explore.
-                </div>
-
-                <i
-                    class="shortcut-arrow"
-                    data-lucide="arrow-up-right"
-                ></i>
-
-            </a>
-
-
-            <!-- YouTube -->
-
-            <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shortcut"
-                style="--accent:#ff3b4f;"
-            >
-
-                <div class="shortcut-icon">
-
-                    <i data-lucide="play"></i>
-
-                </div>
-
-                <div class="shortcut-name">
-                    YouTube
-                </div>
-
-                <div class="shortcut-description">
-                    Watch. Learn. Create.
-                </div>
-
-                <i
-                    class="shortcut-arrow"
-                    data-lucide="arrow-up-right"
-                ></i>
-
-            </a>
-
-
-            <!-- Reddit -->
-
-            <a
-                href="https://reddit.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shortcut"
-                style="--accent:#ff6b35;"
-            >
-
-                <div class="shortcut-icon">
-
-                    <i data-lucide="message-circle"></i>
-
-                </div>
-
-                <div class="shortcut-name">
-                    Reddit
-                </div>
-
-                <div class="shortcut-description">
-                    Ideas. Communities. Stories.
-                </div>
-
-                <i
-                    class="shortcut-arrow"
-                    data-lucide="arrow-up-right"
-                ></i>
-
-            </a>
-
-
-            <!-- X -->
-
-            <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="shortcut"
-                style="--accent:#38bdf8;"
-            >
-
-                <div class="shortcut-icon">
-
-                    <i data-lucide="radio"></i>
-
-                </div>
-
-                <div class="shortcut-name">
-                    X / Twitter
-                </div>
-
-                <div class="shortcut-description">
-                    What's happening?
-                </div>
-
-                <i
-                    class="shortcut-arrow"
-                    data-lucide="arrow-up-right"
-                ></i>
-
-            </a>
-
-
-        </section>
-
-
-        <!-- STATUS -->
-
-        <div class="info-row">
-
-            <div class="online">
-
-                <span class="online-dot"></span>
-
-                <span>
-                    All systems online
-                </span>
+                <span></span>
 
             </div>
 
-            <span>•</span>
 
-            <span>
-                WebPulse v1.0
-            </span>
+            <div class="links">
 
-        </div>
+
+                <!-- GitHub -->
+
+                <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link"
+                >
+
+                    <span class="link-number">
+                        01
+                    </span>
+
+
+                    <i
+                        class="link-icon"
+                        data-lucide="github"
+                    ></i>
+
+
+                    <div class="link-name">
+                        GitHub
+                    </div>
+
+
+                    <div class="link-url">
+                        github.com
+                    </div>
+
+
+                    <i
+                        class="link-arrow"
+                        data-lucide="arrow-up-right"
+                    ></i>
+
+                </a>
+
+
+                <!-- YouTube -->
+
+                <a
+                    href="https://youtube.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link"
+                >
+
+                    <span class="link-number">
+                        02
+                    </span>
+
+
+                    <i
+                        class="link-icon"
+                        data-lucide="play"
+                    ></i>
+
+
+                    <div class="link-name">
+                        YouTube
+                    </div>
+
+
+                    <div class="link-url">
+                        youtube.com
+                    </div>
+
+
+                    <i
+                        class="link-arrow"
+                        data-lucide="arrow-up-right"
+                    ></i>
+
+                </a>
+
+
+                <!-- Reddit -->
+
+                <a
+                    href="https://reddit.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link"
+                >
+
+                    <span class="link-number">
+                        03
+                    </span>
+
+
+                    <i
+                        class="link-icon"
+                        data-lucide="message-square"
+                    ></i>
+
+
+                    <div class="link-name">
+                        Reddit
+                    </div>
+
+
+                    <div class="link-url">
+                        reddit.com
+                    </div>
+
+
+                    <i
+                        class="link-arrow"
+                        data-lucide="arrow-up-right"
+                    ></i>
+
+                </a>
+
+
+                <!-- X -->
+
+                <a
+                    href="https://x.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link"
+                >
+
+                    <span class="link-number">
+                        04
+                    </span>
+
+
+                    <i
+                        class="link-icon"
+                        data-lucide="radio"
+                    ></i>
+
+
+                    <div class="link-name">
+                        X
+                    </div>
+
+
+                    <div class="link-url">
+                        x.com
+                    </div>
+
+
+                    <i
+                        class="link-arrow"
+                        data-lucide="arrow-up-right"
+                    ></i>
+
+                </a>
+
+
+            </div>
+
+        </section>
 
 
     </main>
 
 
-    <!-- =========================================================
-         FOOTER
-    ========================================================== -->
+    <!-- =====================================================
+         BOTTOM DATA
+    ====================================================== -->
 
-    <footer>
-        WEBPULSE &nbsp; / &nbsp; A BETTER WAY TO BEGIN
-    </footer>
+    <div class="bottom-data">
+
+        <div class="bottom-left">
+
+            <span>
+                GUDOV
+            </span>
+
+            <span class="separator"></span>
+
+            <span>
+                WEBPULSE
+            </span>
+
+            <span class="separator"></span>
+
+            <span>
+                v0.1
+            </span>
+
+        </div>
 
 
+        <div class="bottom-right">
+
+            <span>
+                CTRL + K
+            </span>
+
+            <span class="separator"></span>
+
+            <span>
+                SEARCH
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
 
     <script>
 
-        /* =========================================================
+
+        /* =====================================================
            ICONS
-        ========================================================= */
+        ===================================================== */
 
         lucide.createIcons();
 
 
-        /* =========================================================
-           CLOCK
-        ========================================================= */
+        /* =====================================================
+           CLOCK SETTINGS
+        ===================================================== */
+
+        let use24Hour = true;
+
+        let showSeconds = false;
+
 
         const clock =
             document.getElementById("clock");
@@ -1314,27 +1949,59 @@
         const date =
             document.getElementById("date");
 
+        const topTime =
+            document.getElementById("topTime");
+
 
         function updateClock() {
 
             const now = new Date();
 
 
+            let options = {
+
+                hour: "2-digit",
+
+                minute: "2-digit",
+
+                hour12: !use24Hour
+
+            };
+
+
+            if (showSeconds) {
+
+                options.second =
+                    "2-digit";
+
+            }
+
+
+            const time =
+                now.toLocaleTimeString(
+                    [],
+                    options
+                );
+
+
             clock.textContent =
-                now.toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false
-                });
+                time;
+
+
+            topTime.textContent =
+                time;
 
 
             date.textContent =
-                now.toLocaleDateString([], {
-                    weekday: "short",
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
-                });
+                now.toLocaleDateString(
+                    [],
+                    {
+                        weekday: "short",
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric"
+                    }
+                ).toUpperCase();
 
         }
 
@@ -1347,18 +2014,26 @@
         );
 
 
-        /* =========================================================
+        /* =====================================================
            SEARCH
-        ========================================================== */
+        ===================================================== */
 
         const searchForm =
-            document.getElementById("searchForm");
+            document.getElementById(
+                "searchForm"
+            );
+
 
         const searchInput =
-            document.getElementById("search");
+            document.getElementById(
+                "search"
+            );
+
 
         const engine =
-            document.getElementById("engine");
+            document.getElementById(
+                "engine"
+            );
 
 
         const searchEngines = {
@@ -1399,13 +2074,16 @@
 
 
                 /*
-                 * If the user entered a complete URL,
-                 * open it directly.
+                 * Complete URL
                  */
 
                 if (
-                    query.startsWith("https://") ||
-                    query.startsWith("http://")
+                    query.startsWith(
+                        "https://"
+                    ) ||
+                    query.startsWith(
+                        "http://"
+                    )
                 ) {
 
                     window.location.href =
@@ -1417,20 +2095,16 @@
 
 
                 /*
-                 * Detect normal domains such as:
-                 *
-                 * github.com
-                 * wikipedia.org
-                 * example.com/page
+                 * Detect domains
                  */
 
-                const looksLikeURL =
+                const isURL =
                     /^[\w-]+(\.[\w-]+)+(\/.*)?$/i
                         .test(query);
 
 
                 if (
-                    looksLikeURL &&
+                    isURL &&
                     !query.includes(" ")
                 ) {
 
@@ -1443,38 +2117,32 @@
 
 
                 /*
-                 * Otherwise perform a search.
+                 * Search engine
                  */
 
-                const selectedEngine =
-                    engine.value;
-
-                const searchURL =
+                const base =
                     searchEngines[
-                        selectedEngine
-                    ] || searchEngines.google;
+                        engine.value
+                    ];
 
 
                 window.location.href =
-                    searchURL +
-                    encodeURIComponent(query);
+                    base +
+                    encodeURIComponent(
+                        query
+                    );
 
             }
         );
 
 
-        /* =========================================================
-           KEYBOARD SHORTCUT
-        ========================================================== */
+        /* =====================================================
+           CTRL + K
+        ===================================================== */
 
         document.addEventListener(
             "keydown",
             function(event) {
-
-                /*
-                 * Ctrl + K / Cmd + K
-                 * focuses the search bar.
-                 */
 
                 if (
                     (event.ctrlKey ||
@@ -1492,27 +2160,273 @@
         );
 
 
-        /* =========================================================
-           SHORTCUT INTERACTION
-        ========================================================== */
+        /* =====================================================
+           SETTINGS DRAWER
+        ===================================================== */
 
-        const shortcuts =
-            document.querySelectorAll(".shortcut");
+        const settingsButton =
+            document.getElementById(
+                "settingsButton"
+            );
 
 
-        shortcuts.forEach(
-            shortcut => {
+        const drawer =
+            document.getElementById(
+                "settingsDrawer"
+            );
 
-                shortcut.addEventListener(
+
+        const closeSettings =
+            document.getElementById(
+                "closeSettings"
+            );
+
+
+        settingsButton.addEventListener(
+            "click",
+            function() {
+
+                drawer.classList.add(
+                    "open"
+                );
+
+            }
+        );
+
+
+        closeSettings.addEventListener(
+            "click",
+            function() {
+
+                drawer.classList.remove(
+                    "open"
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           24 HOUR TOGGLE
+        ===================================================== */
+
+        const formatToggle =
+            document.getElementById(
+                "formatToggle"
+            );
+
+
+        formatToggle.addEventListener(
+            "click",
+            function() {
+
+                use24Hour =
+                    !use24Hour;
+
+                this.classList.toggle(
+                    "active"
+                );
+
+                updateClock();
+
+            }
+        );
+
+
+        /* =====================================================
+           SECONDS TOGGLE
+        ===================================================== */
+
+        const secondsToggle =
+            document.getElementById(
+                "secondsToggle"
+            );
+
+
+        secondsToggle.addEventListener(
+            "click",
+            function() {
+
+                showSeconds =
+                    !showSeconds;
+
+                this.classList.toggle(
+                    "active"
+                );
+
+                updateClock();
+
+            }
+        );
+
+
+        /* =====================================================
+           SCAN ANIMATION
+        ===================================================== */
+
+        const scanToggle =
+            document.getElementById(
+                "scanToggle"
+            );
+
+
+        const scanline =
+            document.querySelector(
+                ".scanline"
+            );
+
+
+        scanToggle.addEventListener(
+            "click",
+            function() {
+
+                this.classList.toggle(
+                    "active"
+                );
+
+
+                if (
+                    this.classList.contains(
+                        "active"
+                    )
+                ) {
+
+                    scanline.style.display =
+                        "block";
+
+                } else {
+
+                    scanline.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           GRAIN
+        ===================================================== */
+
+        const grainToggle =
+            document.getElementById(
+                "grainToggle"
+            );
+
+
+        const noise =
+            document.querySelector(
+                ".noise"
+            );
+
+
+        grainToggle.addEventListener(
+            "click",
+            function() {
+
+                this.classList.toggle(
+                    "active"
+                );
+
+
+                noise.style.display =
+                    this.classList.contains(
+                        "active"
+                    )
+                        ? "block"
+                        : "none";
+
+            }
+        );
+
+
+        /* =====================================================
+           BACKGROUND THEMES
+        ===================================================== */
+
+        const themeButtons =
+            document.querySelectorAll(
+                ".theme-button"
+            );
+
+
+        themeButtons.forEach(
+            button => {
+
+                button.addEventListener(
                     "click",
-                    () => {
+                    function() {
 
-                        shortcut
-                            .querySelector(
-                                ".shortcut-icon"
-                            )
-                            .style.transform =
-                            "scale(1.15)";
+                        themeButtons.forEach(
+                            b =>
+                                b.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                        this.classList.add(
+                            "selected"
+                        );
+
+
+                        const theme =
+                            this.dataset.theme;
+
+
+                        if (
+                            theme === "midnight"
+                        ) {
+
+                            document.body.style.backgroundImage =
+                                `
+                                linear-gradient(
+                                    rgba(2,7,14,.82),
+                                    rgba(2,7,14,.92)
+                                ),
+                                url("assets/background.jpg")
+                                `;
+
+                        }
+
+
+                        else if (
+                            theme === "blue"
+                        ) {
+
+                            document.body.style.backgroundImage =
+                                `
+                                linear-gradient(
+                                    rgba(0,25,45,.55),
+                                    rgba(2,7,14,.75)
+                                ),
+                                url("assets/background.jpg")
+                                `;
+
+                        }
+
+
+                        else {
+
+                            document.body.style.backgroundImage =
+                                `
+                                linear-gradient(
+                                    90deg,
+                                    rgba(2,7,14,.62),
+                                    rgba(2,7,14,.20),
+                                    rgba(2,7,14,.55)
+                                ),
+                                linear-gradient(
+                                    0deg,
+                                    rgba(2,7,14,.78),
+                                    transparent 55%,
+                                    rgba(2,7,14,.25)
+                                ),
+                                url("assets/background.jpg")
+                                `;
+
+                        }
 
                     }
                 );
@@ -1520,7 +2434,9 @@
             }
         );
 
+
     </script>
 
 </body>
+
 </html>
