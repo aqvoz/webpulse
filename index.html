@@ -1,24 +1,62 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gudov — Smart New Tab</title>
-    <!-- Modern Google Font: Inter -->
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="WebPulse — a minimal futuristic new tab experience."
+    >
+
+    <title>WebPulse</title>
+
+    <!-- Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
     <style>
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
         :root {
-            --bg-dark: #090d16;
-            --card-bg: rgba(22, 30, 46, 0.7);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --accent-glow: #38bdf8;
-            --accent-purple: #818cf8;
-            --text-primary: #f8fafc;
-            --text-muted: #94a3b8;
-            --input-bg: rgba(15, 23, 42, 0.8);
+            --background: #030711;
+            --panel: rgba(7, 15, 29, 0.72);
+            --panel-solid: #07101e;
+
+            --border: rgba(148, 163, 184, 0.13);
+            --border-hover: rgba(56, 189, 248, 0.42);
+
+            --blue: #38bdf8;
+            --blue-bright: #60a5fa;
+            --purple: #818cf8;
+
+            --text: #f1f5f9;
+            --muted: #7f91aa;
+            --dim: #46566d;
+
+            --radius: 18px;
         }
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
 
         * {
             box-sizing: border-box;
@@ -26,379 +64,1463 @@ DOCTYPE html>
             padding: 0;
         }
 
+        html {
+            height: 100%;
+        }
+
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            min-height: 100%;
+            background: var(--background);
+            color: var(--text);
+
+            font-family:
+                "Inter",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
         }
 
-        /* Top Bar */
-        .top-bar {
-            width: 100%;
-            padding: 1.5rem 2rem;
+
+        /* =========================================================
+           SPACE BACKGROUND
+        ========================================================= */
+
+        .space {
+            position: fixed;
+            inset: 0;
+
+            z-index: -5;
+
+            background:
+                radial-gradient(
+                    ellipse at 50% 55%,
+                    rgba(25, 70, 130, 0.18),
+                    transparent 48%
+                ),
+
+                radial-gradient(
+                    ellipse at 15% 25%,
+                    rgba(56, 189, 248, 0.08),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    ellipse at 85% 75%,
+                    rgba(99, 102, 241, 0.09),
+                    transparent 40%
+                ),
+
+                #030711;
+        }
+
+
+        /* Stars */
+
+        .space::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            opacity: 0.38;
+
+            background-image:
+                radial-gradient(
+                    circle,
+                    rgba(255,255,255,.8) 1px,
+                    transparent 1px
+                );
+
+            background-size: 150px 150px;
+
+            background-position:
+                20px 30px;
+        }
+
+
+        /* Nebula */
+
+        .nebula {
+            position: absolute;
+
+            width: 700px;
+            height: 400px;
+
+            left: 50%;
+            bottom: -100px;
+
+            transform: translateX(-50%);
+
+            background:
+                radial-gradient(
+                    ellipse,
+                    rgba(37, 99, 235, .17),
+                    transparent 68%
+                );
+
+            filter: blur(30px);
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           TOP NAVIGATION
+        ========================================================= */
+
+        header {
+            height: 78px;
+
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            z-index: 10;
+
+            padding: 0 38px;
+
+            border-bottom: 1px solid var(--border);
+
+            background:
+                rgba(2, 7, 17, 0.62);
+
+            backdrop-filter: blur(20px);
         }
 
-        .brand-badge {
+
+        .brand {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: -0.02em;
-            color: var(--text-primary);
+            gap: 11px;
+
+            font-size: 1.18rem;
+            font-weight: 600;
+
+            letter-spacing: -0.03em;
         }
 
-        .brand-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--accent-glow), var(--accent-purple));
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid rgba(56,189,248,.5);
+
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(56,189,248,.2),
+                    rgba(129,140,248,.1)
+                );
+
+            box-shadow:
+                0 0 20px rgba(56,189,248,.12);
         }
 
-        .brand-icon::after {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: #fff;
+
+        .brand-mark i {
+            width: 8px;
+            height: 8px;
+
             border-radius: 50%;
+
+            background: var(--blue);
+
+            box-shadow:
+                0 0 12px var(--blue);
         }
 
-        .weather-widget {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            backdrop-filter: blur(12px);
-            font-size: 0.9rem;
-            color: var(--text-muted);
+
+        .brand span {
+            color: #e2e8f0;
         }
 
-        .weather-temp {
-            color: var(--text-primary);
+
+        .brand strong {
+            color: var(--blue);
             font-weight: 600;
         }
 
-        /* Main Container */
-        .main-container {
+
+        /* Navigation */
+
+        .nav {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 680px;
-            padding: 2rem;
-            z-index: 10;
+            gap: 32px;
         }
 
-        /* Clock Section */
-        .clock-section {
-            text-align: center;
-            margin-bottom: 2.5rem;
+
+        .nav a {
+            position: relative;
+
+            color: var(--muted);
+
+            text-decoration: none;
+
+            font-size: .84rem;
+
+            transition: color .2s ease;
         }
+
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--text);
+        }
+
+
+        .nav a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+
+            bottom: -29px;
+
+            height: 2px;
+
+            background: var(--blue);
+
+            box-shadow:
+                0 0 12px rgba(56,189,248,.7);
+        }
+
+
+        .settings {
+            width: 36px;
+            height: 36px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            background: transparent;
+
+            color: var(--muted);
+
+            cursor: pointer;
+
+            transition:
+                color .2s,
+                border-color .2s,
+                transform .2s;
+        }
+
+
+        .settings:hover {
+            color: var(--blue);
+            border-color: var(--border-hover);
+
+            transform: rotate(15deg);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        main {
+            width: min(1120px, calc(100% - 60px));
+
+            margin: 0 auto;
+
+            min-height:
+                calc(100vh - 140px);
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* =========================================================
+           CLOCK
+        ========================================================= */
+
+        .clock-area {
+            text-align: center;
+
+            margin-top: -20px;
+
+            margin-bottom: 48px;
+        }
+
 
         #clock {
-            font-size: 5rem;
-            font-weight: 700;
-            letter-spacing: -0.04em;
-            background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            margin-bottom: 0.75rem;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-size: clamp(4.5rem, 10vw, 7.5rem);
+
+            line-height: .9;
+
+            font-weight: 300;
+
+            letter-spacing: -.065em;
+
+            color: #e8f1ff;
+
+            text-shadow:
+                0 0 45px rgba(96,165,250,.12);
         }
 
-        #greeting {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            font-weight: 400;
+
+        .date {
+            margin-top: 22px;
+
+            color: #71839b;
+
+            font-size: .82rem;
+
+            letter-spacing: .22em;
+
+            text-transform: uppercase;
         }
 
-        /* Search Card */
-        .search-card {
+
+        .status-line {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 14px;
+
+            margin-top: 20px;
+
+            color: var(--muted);
+
+            font-size: .72rem;
+
+            letter-spacing: .3em;
+
+            text-transform: uppercase;
+        }
+
+
+        .status-line::before,
+        .status-line::after {
+            content: "";
+
+            width: 55px;
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(56,189,248,.4)
+                );
+        }
+
+
+        .status-line::after {
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(56,189,248,.4),
+                    transparent
+                );
+        }
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        .search-wrapper {
+            width: min(760px, 100%);
+
+            position: relative;
+        }
+
+
+        .search-box {
             width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 0.5rem;
-            border-radius: 1.25rem;
+            height: 68px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 9px 0 22px;
+
+            border: 1px solid rgba(56,189,248,.28);
+
+            border-radius: 20px;
+
+            background:
+                rgba(3, 10, 23, .82);
+
             backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
+
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,.015),
+                0 18px 50px rgba(0,0,0,.35);
+
+            transition:
+                border-color .25s,
+                box-shadow .25s;
         }
 
-        .search-card:focus-within {
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+
+        .search-box:focus-within {
+            border-color: rgba(56,189,248,.75);
+
+            box-shadow:
+                0 0 30px rgba(56,189,248,.12),
+                0 20px 55px rgba(0,0,0,.45);
         }
 
-        .engine-select {
-            background: transparent;
-            border: none;
-            color: var(--accent-glow);
-            font-family: inherit;
-            font-size: 0.9rem;
-            font-weight: 600;
-            padding: 0.5rem 0.75rem;
-            cursor: pointer;
-            border-radius: 0.75rem;
-            outline: none;
+
+        .search-icon {
+            width: 21px;
+
+            color: var(--blue);
+
+            margin-right: 16px;
         }
 
-        .engine-select option {
-            background: #0f172a;
-            color: #fff;
-        }
 
-        .search-input {
+        #search {
             flex: 1;
-            padding: 0.75rem;
-            border: none;
+
+            height: 100%;
+
+            border: 0;
+            outline: 0;
+
             background: transparent;
-            color: var(--text-primary);
-            font-size: 1.1rem;
+
+            color: var(--text);
+
             font-family: inherit;
+
+            font-size: 1rem;
+        }
+
+
+        #search::placeholder {
+            color: #50627a;
+        }
+
+
+        .engine {
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 0 14px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: rgba(8,18,34,.8);
+
+            color: #a9bad0;
+
+            font-size: .78rem;
+
+            cursor: pointer;
+
             outline: none;
         }
 
-        .search-input::placeholder {
-            color: #475569;
+
+        .engine:focus {
+            border-color: var(--border-hover);
         }
 
-        .search-hint {
-            padding: 0.4rem 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-right: 0.5rem;
+
+        .engine option {
+            background: #07101e;
+            color: white;
         }
 
-        /* Quick Links Shortcuts Grid */
-        .shortcuts-grid {
+
+        .search-button {
+            width: 48px;
+            height: 48px;
+
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
-            margin-top: 3rem;
-            width: 100%;
+            place-items: center;
+
+            margin-left: 8px;
+
+            border: 0;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #38bdf8
+                );
+
+            color: white;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 0 20px rgba(56,189,248,.2);
+
+            transition:
+                transform .2s,
+                box-shadow .2s;
         }
 
-        .shortcut-tile {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 1.25rem 1rem;
-            border-radius: 1rem;
+
+        .search-button:hover {
+            transform: translateX(2px);
+
+            box-shadow:
+                0 0 30px rgba(56,189,248,.35);
+        }
+
+
+        /* =========================================================
+           QUICK ACCESS
+        ========================================================= */
+
+        .section-label {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 0.6rem;
-            text-decoration: none;
-            color: var(--text-primary);
-            backdrop-filter: blur(12px);
-            transition: transform 0.2s, border-color 0.2s, background 0.2s;
+
+            gap: 16px;
+
+            margin-top: 58px;
+            margin-bottom: 22px;
+
+            color: #53657d;
+
+            font-size: .67rem;
+
+            letter-spacing: .35em;
+
+            text-transform: uppercase;
         }
 
-        .shortcut-tile:hover {
-            transform: translateY(-4px);
-            border-color: rgba(56, 189, 248, 0.3);
-            background: rgba(30, 41, 59, 0.8);
+
+        .section-label::before,
+        .section-label::after {
+            content: "";
+
+            width: 70px;
+            height: 1px;
+
+            background: var(--border);
         }
+
+
+        .shortcuts {
+            width: min(850px, 100%);
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+        }
+
+
+        .shortcut {
+            position: relative;
+
+            min-height: 135px;
+
+            padding: 20px;
+
+            overflow: hidden;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(10,21,38,.75),
+                    rgba(3,10,20,.72)
+                );
+
+            text-decoration: none;
+
+            color: var(--text);
+
+            backdrop-filter: blur(15px);
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease,
+                background .25s ease;
+        }
+
+
+        .shortcut:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(56,189,248,.4);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(13,31,53,.9),
+                    rgba(3,12,24,.85)
+                );
+        }
+
+
+        /* Vertical glow line */
+
+        .shortcut::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 18px;
+            bottom: 18px;
+
+            width: 2px;
+
+            background: var(--accent);
+
+            box-shadow:
+                0 0 14px var(--accent);
+
+            opacity: .75;
+
+            transition:
+                top .25s,
+                bottom .25s,
+                opacity .25s;
+        }
+
+
+        .shortcut:hover::before {
+            top: 8px;
+            bottom: 8px;
+            opacity: 1;
+        }
+
+
+        /* Icon */
 
         .shortcut-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            width: 38px;
+            height: 38px;
+
+            display: grid;
+            place-items: center;
+
+            margin-bottom: 18px;
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            border-radius: 11px;
+
+            background: rgba(255,255,255,.025);
+
+            color: #8295ad;
+
+            transition:
+                color .25s,
+                border-color .25s,
+                transform .25s,
+                box-shadow .25s;
+        }
+
+
+        .shortcut:hover .shortcut-icon {
+            color: var(--accent);
+
+            border-color:
+                color-mix(
+                    in srgb,
+                    var(--accent) 45%,
+                    transparent
+                );
+
+            transform:
+                translateY(-3px)
+                scale(1.08);
+
+            box-shadow:
+                0 0 20px
+                color-mix(
+                    in srgb,
+                    var(--accent) 18%,
+                    transparent
+                );
+        }
+
+
+        .shortcut-name {
+            font-size: .9rem;
+
+            font-weight: 500;
+        }
+
+
+        .shortcut-description {
+            margin-top: 6px;
+
+            color: #53657d;
+
+            font-size: .7rem;
+        }
+
+
+        .shortcut-arrow {
+            position: absolute;
+
+            right: 17px;
+            bottom: 16px;
+
+            color: #40526b;
+
+            opacity: 0;
+
+            transform:
+                translate(-5px, 5px);
+
+            transition:
+                opacity .25s,
+                transform .25s,
+                color .25s;
+        }
+
+
+        .shortcut:hover .shortcut-arrow {
+            opacity: 1;
+
+            color: var(--accent);
+
+            transform: translate(0,0);
+        }
+
+
+        /* =========================================================
+           LOWER INFO
+        ========================================================= */
+
+        .info-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 25px;
+
+            margin-top: 45px;
+
+            color: #3f5168;
+
+            font-size: .68rem;
+
+            letter-spacing: .05em;
+        }
+
+
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+
+        .online-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #34d399;
+
+            box-shadow:
+                0 0 10px rgba(52,211,153,.7);
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            height: 62px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 600;
+
+            color: #33445a;
+
+            font-size: .68rem;
+
+            letter-spacing: .08em;
+
+            border-top: 1px solid rgba(148,163,184,.05);
         }
 
-        .shortcut-title {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-muted);
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 850px) {
+
+            header {
+                padding: 0 20px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            main {
+                width: min(
+                    100% - 32px,
+                    700px
+                );
+            }
+
+            .shortcuts {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            #clock {
+                font-size:
+                    clamp(4rem, 16vw, 6rem);
+            }
+
         }
 
-        /* Footer */
-        .footer-info {
-            padding: 1.5rem;
-            color: #475569;
-            font-size: 0.85rem;
-            text-align: center;
-            z-index: 10;
+
+        @media (max-width: 560px) {
+
+            .clock-area {
+                margin-bottom: 35px;
+            }
+
+            .search-box {
+                height: 62px;
+
+                padding-left: 16px;
+            }
+
+            .engine {
+                display: none;
+            }
+
+            .search-button {
+                width: 44px;
+                height: 44px;
+            }
+
+            .shortcuts {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .shortcut {
+                min-height: 120px;
+                padding: 16px;
+            }
+
+            .info-row {
+                display: none;
+            }
+
+            footer {
+                font-size: .6rem;
+            }
+
         }
 
-        @media (max-width: 640px) {
-            #clock { font-size: 3.5rem; }
-            .shortcuts-grid { grid-template-columns: repeat(2, 1fr); }
-            .main-container { padding: 1rem; }
-        }
     </style>
 </head>
+
+
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="brand-badge">
-            <div class="brand-icon"></div>
-            <span>Gudov</span>
-        </div>
-        
-        <div class="weather-widget" id="weather">
-            <span id="weather-icon">🌤️</span>
-            <span class="weather-temp" id="weather-temp">--°C</span>
-            <span id="weather-city">Fetching...</span>
-        </div>
+    <!-- =========================================================
+         SPACE BACKGROUND
+    ========================================================== -->
+
+    <div class="space">
+        <div class="nebula"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-container">
-        <div class="clock-section">
-            <h1 id="clock">00:00</h1>
-            <p id="greeting">Ready to start surfing?</p>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header>
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                <i></i>
+            </div>
+
+            <span>
+                Web<strong>Pulse</strong>
+            </span>
+
         </div>
 
-        <div class="search-card">
-            <select class="engine-select" id="engine" aria-label="Select Search Engine">
-                <option value="google">Google</option>
-                <option value="duckduckgo">DuckDuckGo</option>
-                <option value="bing">Bing</option>
-                <option value="youtube">YouTube</option>
-            </select>
-            <input type="text" class="search-input" id="search" placeholder="Type a search query or URL..." autofocus autocomplete="off">
-            <span class="search-hint">Press ↵</span>
+
+        <nav class="nav">
+
+            <a href="#" class="active">
+                Home
+            </a>
+
+            <a href="#shortcuts">
+                Shortcuts
+            </a>
+
+            <a href="#">
+                Settings
+            </a>
+
+            <button
+                class="settings"
+                aria-label="Settings"
+            >
+                <i data-lucide="settings"></i>
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+    <main>
+
+
+        <!-- CLOCK -->
+
+        <section class="clock-area">
+
+            <h1 id="clock">
+                00:00
+            </h1>
+
+            <p
+                class="date"
+                id="date"
+            >
+                Loading date...
+            </p>
+
+            <div class="status-line">
+                Explore. Create. Discover.
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SEARCH
+        ====================================================== -->
+
+        <form
+            class="search-wrapper"
+            id="searchForm"
+        >
+
+            <div class="search-box">
+
+                <i
+                    class="search-icon"
+                    data-lucide="search"
+                ></i>
+
+
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Search the web, or enter a URL..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="Search the web"
+                    autofocus
+                >
+
+
+                <select
+                    id="engine"
+                    class="engine"
+                    aria-label="Search engine"
+                >
+
+                    <option value="google">
+                        Google
+                    </option>
+
+                    <option value="duckduckgo">
+                        DuckDuckGo
+                    </option>
+
+                    <option value="bing">
+                        Bing
+                    </option>
+
+                    <option value="youtube">
+                        YouTube
+                    </option>
+
+                </select>
+
+
+                <button
+                    class="search-button"
+                    type="submit"
+                    aria-label="Search"
+                >
+
+                    <i data-lucide="arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- =====================================================
+             SHORTCUTS
+        ====================================================== -->
+
+        <div
+            class="section-label"
+            id="shortcuts"
+        >
+            Quick Access
         </div>
 
-        <!-- Customizable Shortcuts -->
-        <div class="shortcuts-grid">
-            <a href="https://github.com" class="shortcut-tile">
-                <div class="shortcut-icon" style="color: #f0f6fc;">🐙</div>
-                <span class="shortcut-title">GitHub</span>
-            </a>
-            <a href="https://youtube.com" class="shortcut-tile">
-                <div class="shortcut-icon" style="color: #ff0000;">▶️</div>
-                <span class="shortcut-title">YouTube</span>
-            </a>
-            <a href="https://reddit.com" class="shortcut-tile">
-                <div class="shortcut-icon" style="color: #ff4500;">🤖</div>
-                <span class="shortcut-title">Reddit</span>
-            </a>
-            <a href="https://x.com" class="shortcut-tile">
-                <div class="shortcut-icon" style="color: #38bdf8;">⚡</div>
-                <span class="shortcut-title">X / Twitter</span>
-            </a>
-        </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer-info">
-        Gudov Browser OS • Built for speed & simplicity
-    </div>
+        <section class="shortcuts">
+
+
+            <!-- GitHub -->
+
+            <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shortcut"
+                style="--accent:#f1f5f9;"
+            >
+
+                <div class="shortcut-icon">
+
+                    <i data-lucide="github"></i>
+
+                </div>
+
+                <div class="shortcut-name">
+                    GitHub
+                </div>
+
+                <div class="shortcut-description">
+                    Build. Share. Explore.
+                </div>
+
+                <i
+                    class="shortcut-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- YouTube -->
+
+            <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shortcut"
+                style="--accent:#ff3b4f;"
+            >
+
+                <div class="shortcut-icon">
+
+                    <i data-lucide="play"></i>
+
+                </div>
+
+                <div class="shortcut-name">
+                    YouTube
+                </div>
+
+                <div class="shortcut-description">
+                    Watch. Learn. Create.
+                </div>
+
+                <i
+                    class="shortcut-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- Reddit -->
+
+            <a
+                href="https://reddit.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shortcut"
+                style="--accent:#ff6b35;"
+            >
+
+                <div class="shortcut-icon">
+
+                    <i data-lucide="message-circle"></i>
+
+                </div>
+
+                <div class="shortcut-name">
+                    Reddit
+                </div>
+
+                <div class="shortcut-description">
+                    Ideas. Communities. Stories.
+                </div>
+
+                <i
+                    class="shortcut-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- X -->
+
+            <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="shortcut"
+                style="--accent:#38bdf8;"
+            >
+
+                <div class="shortcut-icon">
+
+                    <i data-lucide="radio"></i>
+
+                </div>
+
+                <div class="shortcut-name">
+                    X / Twitter
+                </div>
+
+                <div class="shortcut-description">
+                    What's happening?
+                </div>
+
+                <i
+                    class="shortcut-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+        </section>
+
+
+        <!-- STATUS -->
+
+        <div class="info-row">
+
+            <div class="online">
+
+                <span class="online-dot"></span>
+
+                <span>
+                    All systems online
+                </span>
+
+            </div>
+
+            <span>•</span>
+
+            <span>
+                WebPulse v1.0
+            </span>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer>
+        WEBPULSE &nbsp; / &nbsp; A BETTER WAY TO BEGIN
+    </footer>
+
+
 
     <script>
-        // 1. Live Clock & Dynamic Greeting
-        function updateClockAndGreeting() {
+
+        /* =========================================================
+           ICONS
+        ========================================================= */
+
+        lucide.createIcons();
+
+
+        /* =========================================================
+           CLOCK
+        ========================================================= */
+
+        const clock =
+            document.getElementById("clock");
+
+        const date =
+            document.getElementById("date");
+
+
+        function updateClock() {
+
             const now = new Date();
-            const hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            
-            document.getElementById('clock').innerText = `${hours}:${minutes}`;
 
-            let greetText = "Ready to start surfing?";
-            if (hours >= 5 && hours < 12) {
-                greetText = "Good morning! Ready to start surfing?";
-            } else if (hours >= 12 && hours < 17) {
-                greetText = "Good afternoon! Ready to start surfing?";
-            } else if (hours >= 17 && hours < 22) {
-                greetText = "Good evening! Ready to start surfing?";
-            } else {
-                greetText = "Night owl mode activated. Ready to start surfing?";
-            }
-            document.getElementById('greeting').innerText = greetText;
+
+            clock.textContent =
+                now.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false
+                });
+
+
+            date.textContent =
+                now.toLocaleDateString([], {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                });
+
         }
-        setInterval(updateClockAndGreeting, 1000);
-        updateClockAndGreeting();
 
-        // 2. Multi-Engine Search Redirect
-        const searchInput = document.getElementById('search');
-        const engineSelect = document.getElementById('engine');
+
+        updateClock();
+
+        setInterval(
+            updateClock,
+            1000
+        );
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================== */
+
+        const searchForm =
+            document.getElementById("searchForm");
+
+        const searchInput =
+            document.getElementById("search");
+
+        const engine =
+            document.getElementById("engine");
+
 
         const searchEngines = {
-            google: "https://www.google.com/search?q=",
-            duckduckgo: "https://duckduckgo.com/?q=",
-            bing: "https://www.bing.com/search?q=",
-            youtube: "https://www.youtube.com/results?search_query="
+
+            google:
+                "https://www.google.com/search?q=",
+
+            duckduckgo:
+                "https://duckduckgo.com/?q=",
+
+            bing:
+                "https://www.bing.com/search?q=",
+
+            youtube:
+                "https://www.youtube.com/results?search_query="
+
         };
 
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = searchInput.value.trim();
-                if (!query) return;
 
-                // URL detection pattern
-                const isUrl = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(query);
+        searchForm.addEventListener(
+            "submit",
+            function(event) {
 
-                if (query.startsWith('http://') || query.startsWith('https://')) {
-                    window.location.href = query;
-                } else if (isUrl && !query.includes(' ')) {
-                    window.location.href = `https://${query}`;
-                } else {
-                    const engine = engineSelect.value;
-                    const baseUrl = searchEngines[engine] || searchEngines.google;
-                    window.location.href = `${baseUrl}${encodeURIComponent(query)}`;
+                event.preventDefault();
+
+
+                const query =
+                    searchInput.value.trim();
+
+
+                if (!query) {
+
+                    searchInput.focus();
+
+                    return;
+
                 }
-            }
-        });
 
-        // 3. Live Weather API (Public & Keyless API via Open-Meteo)
-        async function fetchWeather() {
-            try {
-                // Approximate location via IP
-                const geoRes = await fetch('https://ipapi.co/json/');
-                const geoData = await geoRes.json();
-                
-                if (geoData.latitude && geoData.longitude) {
-                    const weatherRes = await fetch(
-                        `https://api.open-meteo.com/v1/forecast?latitude=${geoData.latitude}&longitude=${geoData.longitude}&current_weather=true`
-                    );
-                    const weatherData = await weatherRes.json();
-                    
-                    if (weatherData.current_weather) {
-                        const temp = Math.round(weatherData.current_weather.temperature);
-                        document.getElementById('weather-temp').innerText = `${temp}°C`;
-                        document.getElementById('weather-city').innerText = geoData.city || 'Local';
+
+                /*
+                 * If the user entered a complete URL,
+                 * open it directly.
+                 */
+
+                if (
+                    query.startsWith("https://") ||
+                    query.startsWith("http://")
+                ) {
+
+                    window.location.href =
+                        query;
+
+                    return;
+
+                }
+
+
+                /*
+                 * Detect normal domains such as:
+                 *
+                 * github.com
+                 * wikipedia.org
+                 * example.com/page
+                 */
+
+                const looksLikeURL =
+                    /^[\w-]+(\.[\w-]+)+(\/.*)?$/i
+                        .test(query);
+
+
+                if (
+                    looksLikeURL &&
+                    !query.includes(" ")
+                ) {
+
+                    window.location.href =
+                        "https://" + query;
+
+                    return;
+
+                }
+
+
+                /*
+                 * Otherwise perform a search.
+                 */
+
+                const selectedEngine =
+                    engine.value;
+
+                const searchURL =
+                    searchEngines[
+                        selectedEngine
+                    ] || searchEngines.google;
+
+
+                window.location.href =
+                    searchURL +
+                    encodeURIComponent(query);
+
+            }
+        );
+
+
+        /* =========================================================
+           KEYBOARD SHORTCUT
+        ========================================================== */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                /*
+                 * Ctrl + K / Cmd + K
+                 * focuses the search bar.
+                 */
+
+                if (
+                    (event.ctrlKey ||
+                     event.metaKey) &&
+                    event.key.toLowerCase() === "k"
+                ) {
+
+                    event.preventDefault();
+
+                    searchInput.focus();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           SHORTCUT INTERACTION
+        ========================================================== */
+
+        const shortcuts =
+            document.querySelectorAll(".shortcut");
+
+
+        shortcuts.forEach(
+            shortcut => {
+
+                shortcut.addEventListener(
+                    "click",
+                    () => {
+
+                        shortcut
+                            .querySelector(
+                                ".shortcut-icon"
+                            )
+                            .style.transform =
+                            "scale(1.15)";
+
                     }
-                }
-            } catch (err) {
-                document.getElementById('weather-city').innerText = 'Offline';
+                );
+
             }
-        }
-        fetchWeather();
+        );
+
     </script>
+
 </body>
 </html>
