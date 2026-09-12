@@ -1,0 +1,3288 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+```
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Gudov</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+
+    /* =====================================================
+       CORE
+    ===================================================== */
+
+    :root {
+
+        --accent: #62c8ff;
+        --accent-soft: rgba(98, 200, 255, .18);
+        --accent-glow: rgba(98, 200, 255, .32);
+
+        --white: #edf7ff;
+        --muted: #8498ad;
+        --dim: #52667b;
+        --faint: #2c3b4c;
+
+        --line: rgba(145, 182, 215, .14);
+
+        --panel: rgba(3, 10, 18, .72);
+
+        --bg-image: url("assets/background.jpg");
+
+        --cursor-x: 50%;
+        --cursor-y: 50%;
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+    }
+
+
+    body {
+
+        min-height: 100vh;
+
+        color: var(--white);
+
+        font-family:
+            "Inter",
+            system-ui,
+            sans-serif;
+
+        overflow-x: hidden;
+
+        background-color: #03070d;
+
+        background-image:
+
+            linear-gradient(
+                90deg,
+                rgba(2, 7, 14, .66),
+                rgba(2, 7, 14, .20),
+                rgba(2, 7, 14, .58)
+            ),
+
+            linear-gradient(
+                0deg,
+                rgba(2, 7, 14, .82),
+                transparent 55%,
+                rgba(2, 7, 14, .24)
+            ),
+
+            var(--bg-image);
+
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+
+        transition:
+            background-image .45s ease,
+            color .3s ease;
+    }
+
+
+    /* =====================================================
+       CUSTOM CURSOR GLOW
+    ===================================================== */
+
+    body::before {
+
+        content: "";
+
+        position: fixed;
+
+        width: 380px;
+        height: 380px;
+
+        left: var(--cursor-x);
+        top: var(--cursor-y);
+
+        transform:
+            translate(-50%, -50%);
+
+        pointer-events: none;
+
+        z-index: 1;
+
+        background:
+            radial-gradient(
+                circle,
+                var(--accent-soft) 0%,
+                rgba(0,0,0,0) 68%
+            );
+
+        opacity: .38;
+
+        transition:
+            left .15s ease-out,
+            top .15s ease-out;
+    }
+
+
+    /* =====================================================
+       NOISE
+    ===================================================== */
+
+    .noise {
+
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 50;
+
+        pointer-events: none;
+
+        opacity: .035;
+
+        background-image:
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+    }
+
+
+    /* =====================================================
+       ORIGINAL SCAN
+    ===================================================== */
+
+    .scanline {
+
+        position: fixed;
+
+        left: 0;
+        right: 0;
+
+        top: -20px;
+
+        height: 1px;
+
+        z-index: 49;
+
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                var(--accent),
+                transparent
+            );
+
+        box-shadow:
+            0 0 16px var(--accent-glow);
+
+        animation:
+            scan 8s linear infinite;
+    }
+
+
+    @keyframes scan {
+
+        0% {
+            top: -10px;
+            opacity: 0;
+        }
+
+        10% {
+            opacity: .55;
+        }
+
+        90% {
+            opacity: .55;
+        }
+
+        100% {
+            top: 100%;
+            opacity: 0;
+        }
+    }
+
+
+    /* =====================================================
+       SECOND ANIMATION — SIGNAL SWEEP
+    ===================================================== */
+
+    .signal-sweep {
+
+        position: fixed;
+
+        top: 0;
+        bottom: 0;
+
+        left: -20%;
+
+        width: 1px;
+
+        z-index: 2;
+
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                to bottom,
+                transparent,
+                var(--accent),
+                transparent
+            );
+
+        box-shadow:
+            0 0 28px var(--accent-glow);
+
+        opacity: .16;
+
+        transform:
+            rotate(12deg);
+
+        animation:
+            signalSweep 12s
+            cubic-bezier(.4,0,.2,1)
+            infinite;
+    }
+
+
+    @keyframes signalSweep {
+
+        0% {
+            left: -20%;
+            opacity: 0;
+        }
+
+        12% {
+            opacity: .14;
+        }
+
+        45% {
+            opacity: .08;
+        }
+
+        65% {
+            opacity: .16;
+        }
+
+        100% {
+            left: 120%;
+            opacity: 0;
+        }
+    }
+
+
+    /* =====================================================
+       TOP BAR
+    ===================================================== */
+
+    .top {
+
+        height: 70px;
+
+        padding:
+            0 30px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        position: relative;
+
+        z-index: 20;
+
+        border-bottom:
+            1px solid var(--line);
+
+        background:
+            rgba(2, 7, 13, .54);
+
+        backdrop-filter:
+            blur(16px);
+    }
+
+
+    .brand {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        font-size: 17px;
+
+        font-weight: 500;
+
+        letter-spacing: -.035em;
+    }
+
+
+    .brand-line {
+
+        width: 22px;
+
+        height: 1px;
+
+        background:
+            var(--accent);
+
+        box-shadow:
+            0 0 10px var(--accent);
+    }
+
+
+    .brand small {
+
+        color: var(--dim);
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .16em;
+
+        margin-left: 3px;
+    }
+
+
+    /* =====================================================
+       TECH CLOCK
+    ===================================================== */
+
+    .top-right {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 18px;
+    }
+
+
+    .connection {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        color: #63788e;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .13em;
+    }
+
+
+    .connection-dot {
+
+        width: 5px;
+        height: 5px;
+
+        border-radius: 50%;
+
+        background: #6ce0aa;
+
+        box-shadow:
+            0 0 10px #6ce0aa;
+
+        animation:
+            pulse 2s ease-in-out infinite;
+    }
+
+
+    .top-clock {
+
+        position: relative;
+
+        min-width: 138px;
+
+        padding:
+            8px 13px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border:
+            1px solid
+            rgba(145,182,215,.16);
+
+        background:
+            rgba(3,10,18,.58);
+
+        color:
+            var(--accent);
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 11px;
+
+        letter-spacing: .13em;
+
+        box-shadow:
+            inset 0 0 18px
+            rgba(98,200,255,.025);
+    }
+
+
+    .top-clock::before {
+
+        content: "";
+
+        position: absolute;
+
+        left: -1px;
+        top: -1px;
+
+        width: 7px;
+        height: 7px;
+
+        border-top:
+            1px solid var(--accent);
+
+        border-left:
+            1px solid var(--accent);
+    }
+
+
+    .top-clock::after {
+
+        content: "";
+
+        position: absolute;
+
+        right: -1px;
+        bottom: -1px;
+
+        width: 7px;
+        height: 7px;
+
+        border-right:
+            1px solid var(--accent);
+
+        border-bottom:
+            1px solid var(--accent);
+    }
+
+
+    .clock-prefix {
+
+        color:
+            var(--dim);
+
+        margin-right: 8px;
+
+        font-size: 8px;
+    }
+
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: .4;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    main {
+
+        position: relative;
+
+        width:
+            min(1180px, calc(100% - 70px));
+
+        min-height:
+            calc(100vh - 132px);
+
+        margin: auto;
+
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: center;
+    }
+
+
+    /* =====================================================
+       TECH MARKERS
+    ===================================================== */
+
+    .marker {
+
+        position: absolute;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        color:
+            rgba(166,194,219,.34);
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .13em;
+
+        pointer-events: none;
+    }
+
+
+    .marker::before {
+
+        content: "";
+
+        width: 18px;
+
+        height: 1px;
+
+        background:
+            var(--accent-soft);
+    }
+
+
+    .marker.one {
+        top: 16%;
+        left: 0;
+    }
+
+
+    .marker.two {
+        right: 0;
+        top: 25%;
+    }
+
+
+    .marker.three {
+        left: 4%;
+        bottom: 13%;
+    }
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .search-area {
+
+        width:
+            min(760px, 100%);
+
+        margin-left:
+            clamp(0px, 16vw, 190px);
+
+        position: relative;
+
+        z-index: 5;
+    }
+
+
+    .search-shell {
+
+        height: 62px;
+
+        display: flex;
+
+        align-items: center;
+
+        position: relative;
+
+        border:
+            1px solid
+            rgba(150,190,225,.23);
+
+        background:
+            rgba(2,8,16,.70);
+
+        backdrop-filter:
+            blur(18px);
+
+        transition:
+            border-color .25s,
+            box-shadow .25s,
+            transform .25s;
+    }
+
+
+    .search-shell::before,
+    .search-shell::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 10px;
+        height: 10px;
+
+        pointer-events: none;
+    }
+
+
+    .search-shell::before {
+
+        top: -1px;
+        left: -1px;
+
+        border-top:
+            1px solid var(--accent);
+
+        border-left:
+            1px solid var(--accent);
+    }
+
+
+    .search-shell::after {
+
+        right: -1px;
+        bottom: -1px;
+
+        border-right:
+            1px solid var(--accent);
+
+        border-bottom:
+            1px solid var(--accent);
+    }
+
+
+    .search-shell:focus-within {
+
+        border-color:
+            rgba(98,200,255,.55);
+
+        box-shadow:
+            0 0 34px
+            var(--accent-soft);
+
+        transform:
+            translateY(-1px);
+    }
+
+
+    .search-icon {
+
+        width: 18px;
+
+        margin:
+            0 15px 0 19px;
+
+        color:
+            var(--accent);
+
+        opacity: .72;
+    }
+
+
+    #search {
+
+        flex: 1;
+
+        height: 100%;
+
+        border: 0;
+
+        outline: 0;
+
+        background:
+            transparent;
+
+        color:
+            var(--white);
+
+        font-family:
+            "Inter",
+            sans-serif;
+
+        font-size: 14px;
+    }
+
+
+    #search::placeholder {
+        color: #5d7085;
+    }
+
+
+    .engine {
+
+        height: 34px;
+
+        padding:
+            0 10px;
+
+        margin-right: 8px;
+
+        border:
+            1px solid var(--line);
+
+        border-radius: 4px;
+
+        outline: none;
+
+        background:
+            rgba(8,17,29,.8);
+
+        color:
+            #8ca0b5;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 9px;
+
+        cursor: pointer;
+    }
+
+
+    .engine option {
+
+        background:
+            #07101b;
+
+        color: white;
+    }
+
+
+    .search-button {
+
+        width: 42px;
+        height: 42px;
+
+        margin-right: 9px;
+
+        display: grid;
+
+        place-items: center;
+
+        border:
+            1px solid
+            var(--accent-soft);
+
+        background:
+            var(--accent-soft);
+
+        color:
+            var(--accent);
+
+        cursor: pointer;
+
+        transition:
+            background .2s,
+            border-color .2s,
+            transform .2s;
+    }
+
+
+    .search-button:hover {
+
+        background:
+            rgba(98,200,255,.22);
+
+        border-color:
+            rgba(98,200,255,.55);
+
+        transform:
+            translateX(2px);
+    }
+
+
+    /* =====================================================
+       QUICK LINKS
+    ===================================================== */
+
+    .quick {
+
+        width:
+            min(760px, 100%);
+
+        margin-left:
+            clamp(0px, 16vw, 190px);
+
+        margin-top: 25px;
+
+        position: relative;
+
+        z-index: 5;
+    }
+
+
+    .quick-header {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        margin-bottom: 10px;
+
+        color:
+            #60738a;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .2em;
+
+        text-transform: uppercase;
+    }
+
+
+    .quick-header span {
+
+        width: 25px;
+
+        height: 1px;
+
+        background:
+            var(--line);
+    }
+
+
+    .links {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        border-top:
+            1px solid var(--line);
+
+        border-left:
+            1px solid var(--line);
+    }
+
+
+    /* =====================================================
+       SHORTCUT CARD
+    ===================================================== */
+
+    .link {
+
+        position: relative;
+
+        min-height: 104px;
+
+        padding:
+            14px 16px;
+
+        border-right:
+            1px solid var(--line);
+
+        border-bottom:
+            1px solid var(--line);
+
+        background:
+            rgba(3,10,18,.42);
+
+        color:
+            var(--white);
+
+        text-decoration: none;
+
+        overflow: hidden;
+
+        transition:
+            background .25s,
+            border-color .25s,
+            transform .25s;
+    }
+
+
+    .link:hover {
+
+        background:
+            rgba(5,18,31,.72);
+
+        border-color:
+            rgba(98,200,255,.30);
+
+        transform:
+            translateY(-2px);
+    }
+
+
+    .link::before {
+
+        content: "";
+
+        position: absolute;
+
+        left: 0;
+        bottom: 0;
+
+        width: 0;
+        height: 1px;
+
+        background:
+            var(--accent);
+
+        box-shadow:
+            0 0 10px var(--accent-glow);
+
+        transition:
+            width .35s ease;
+    }
+
+
+    .link:hover::before {
+        width: 100%;
+    }
+
+
+    /* =====================================================
+       UNIFIED ICON HEADER
+    ===================================================== */
+
+    .link-top {
+
+        height: 27px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 13px;
+    }
+
+
+    .link-icon {
+
+        width: 19px;
+        height: 19px;
+
+        display: block;
+
+        color:
+            #8297ae;
+
+        transition:
+            color .25s,
+            transform .25s;
+    }
+
+
+    .link:hover .link-icon {
+
+        color:
+            var(--accent);
+
+        transform:
+            translateY(-2px)
+            scale(1.08);
+    }
+
+
+    .link-number {
+
+        color:
+            #33465b;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+    }
+
+
+    .link-name {
+
+        font-size: 12px;
+
+        font-weight: 500;
+    }
+
+
+    .link-url {
+
+        margin-top: 4px;
+
+        color:
+            #52667c;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+    }
+
+
+    .link-arrow {
+
+        position: absolute;
+
+        right: 12px;
+        bottom: 10px;
+
+        width: 12px;
+
+        color:
+            var(--accent);
+
+        opacity: 0;
+
+        transform:
+            translate(-4px, 4px);
+
+        transition:
+            opacity .2s,
+            transform .2s;
+    }
+
+
+    .link:hover .link-arrow {
+
+        opacity: 1;
+
+        transform:
+            translate(0,0);
+    }
+
+
+    /* =====================================================
+       BOTTOM DATA
+    ===================================================== */
+
+    .bottom-data {
+
+        position: fixed;
+
+        bottom: 20px;
+
+        left: 30px;
+        right: 30px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        color:
+            #43566c;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .12em;
+
+        z-index: 10;
+    }
+
+
+    .bottom-left,
+    .bottom-right {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+    }
+
+
+    .separator {
+
+        width: 18px;
+
+        height: 1px;
+
+        background:
+            var(--line);
+    }
+
+
+    /* =====================================================
+       SETTINGS BUTTON
+    ===================================================== */
+
+    .settings-button {
+
+        position: fixed;
+
+        right: 26px;
+        top: 87px;
+
+        width: 38px;
+        height: 38px;
+
+        display: grid;
+
+        place-items: center;
+
+        border:
+            1px solid var(--line);
+
+        background:
+            rgba(3,10,18,.58);
+
+        color:
+            #71859b;
+
+        cursor: pointer;
+
+        z-index: 30;
+
+        transition:
+            color .2s,
+            border-color .2s,
+            transform .2s;
+    }
+
+
+    .settings-button:hover {
+
+        color:
+            var(--accent);
+
+        border-color:
+            var(--accent-soft);
+
+        transform:
+            rotate(20deg);
+    }
+
+
+    /* =====================================================
+       DRAWER
+    ===================================================== */
+
+    .drawer {
+
+        position: fixed;
+
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        width:
+            min(390px, 92vw);
+
+        padding: 30px;
+
+        background:
+            rgba(3,9,17,.97);
+
+        border-left:
+            1px solid var(--line);
+
+        backdrop-filter:
+            blur(25px);
+
+        z-index: 40;
+
+        overflow-y: auto;
+
+        transform:
+            translateX(100%);
+
+        transition:
+            transform .35s
+            cubic-bezier(.16,1,.3,1);
+    }
+
+
+    .drawer.open {
+        transform: translateX(0);
+    }
+
+
+    .drawer-header {
+
+        display: flex;
+
+        justify-content:
+            space-between;
+
+        align-items: center;
+
+        padding-bottom: 20px;
+
+        border-bottom:
+            1px solid var(--line);
+
+        margin-bottom: 28px;
+    }
+
+
+    .drawer-title {
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 10px;
+
+        letter-spacing: .2em;
+
+        color:
+            var(--accent);
+    }
+
+
+    .close-settings {
+
+        width: 30px;
+        height: 30px;
+
+        display: grid;
+
+        place-items: center;
+
+        background:
+            transparent;
+
+        border:
+            1px solid var(--line);
+
+        color:
+            var(--muted);
+
+        cursor: pointer;
+    }
+
+
+    /* =====================================================
+       SETTING GROUP
+    ===================================================== */
+
+    .setting-group {
+        margin-bottom: 30px;
+    }
+
+
+    .setting-label {
+
+        margin-bottom: 13px;
+
+        color:
+            #52667b;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .2em;
+
+        text-transform: uppercase;
+    }
+
+
+    /* =====================================================
+       APPEARANCE GRID
+    ===================================================== */
+
+    .appearance-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+
+    .appearance-option {
+
+        position: relative;
+
+        height: 72px;
+
+        border:
+            1px solid var(--line);
+
+        background:
+            #07101a;
+
+        color:
+            #93a5b8;
+
+        text-align: left;
+
+        padding:
+            10px;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .1em;
+
+        cursor: pointer;
+
+        overflow: hidden;
+
+        transition:
+            border-color .2s,
+            transform .2s;
+    }
+
+
+    .appearance-option:hover {
+
+        transform:
+            translateY(-2px);
+
+        border-color:
+            rgba(255,255,255,.22);
+    }
+
+
+    .appearance-option.selected {
+
+        border-color:
+            var(--accent);
+
+        box-shadow:
+            0 0 16px
+            var(--accent-soft);
+    }
+
+
+    .appearance-option::after {
+
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        opacity: .9;
+
+        z-index: 0;
+    }
+
+
+    .appearance-option span {
+
+        position: relative;
+
+        z-index: 2;
+    }
+
+
+    /* DARK */
+
+    .appearance-dark::after {
+
+        background:
+            radial-gradient(
+                circle at 75% 25%,
+                #182d42,
+                #03070d 72%
+            );
+    }
+
+
+    /* LIGHT */
+
+    .appearance-light::after {
+
+        background:
+            linear-gradient(
+                135deg,
+                #edf4f8,
+                #9eafbc
+            );
+    }
+
+
+    .appearance-light span {
+        color: #15212b;
+    }
+
+
+    /* BLUE */
+
+    .appearance-blue::after {
+
+        background:
+            radial-gradient(
+                circle at 35% 45%,
+                #0873ae,
+                #030910 72%
+            );
+    }
+
+
+    /* MAROON */
+
+    .appearance-maroon::after {
+
+        background:
+            radial-gradient(
+                circle at 70% 35%,
+                #762a42,
+                #14070d 72%
+            );
+    }
+
+
+    /* =====================================================
+       CUSTOM WALLPAPER
+    ===================================================== */
+
+    .custom-wallpaper {
+
+        width: 100%;
+
+        height: 42px;
+
+        margin-top: 9px;
+
+        display: grid;
+
+        place-items: center;
+
+        border:
+            1px dashed
+            rgba(145,177,207,.22);
+
+        background:
+            rgba(8,17,29,.45);
+
+        color:
+            #71859b;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .08em;
+
+        cursor: pointer;
+
+        transition:
+            color .2s,
+            border-color .2s,
+            background .2s;
+    }
+
+
+    .custom-wallpaper:hover {
+
+        color:
+            var(--accent);
+
+        border-color:
+            var(--accent-soft);
+
+        background:
+            var(--accent-soft);
+    }
+
+
+    #wallpaperUpload {
+        display: none;
+    }
+
+
+    /* =====================================================
+       TOGGLES
+    ===================================================== */
+
+    .toggle-row {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding:
+            13px 0;
+
+        border-bottom:
+            1px solid
+            rgba(145,177,207,.07);
+    }
+
+
+    .toggle-name {
+
+        color:
+            #a1b0c0;
+
+        font-size: 11px;
+    }
+
+
+    .toggle {
+
+        position: relative;
+
+        width: 32px;
+        height: 17px;
+
+        border:
+            1px solid #334457;
+
+        background:
+            #0b1420;
+
+        cursor: pointer;
+
+        transition:
+            background .2s,
+            border-color .2s;
+    }
+
+
+    .toggle::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 9px;
+        height: 9px;
+
+        left: 3px;
+        top: 3px;
+
+        background:
+            #607389;
+
+        transition:
+            transform .2s,
+            background .2s;
+    }
+
+
+    .toggle.active {
+
+        border-color:
+            var(--accent);
+
+        background:
+            var(--accent-soft);
+    }
+
+
+    .toggle.active::after {
+
+        transform:
+            translateX(15px);
+
+        background:
+            var(--accent);
+
+        box-shadow:
+            0 0 8px
+            var(--accent-glow);
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    .reset-button {
+
+        width: 100%;
+
+        height: 40px;
+
+        border:
+            1px solid
+            rgba(255,255,255,.08);
+
+        background:
+            transparent;
+
+        color:
+            #687b90;
+
+        font-family:
+            "JetBrains Mono",
+            monospace;
+
+        font-size: 8px;
+
+        letter-spacing: .1em;
+
+        cursor: pointer;
+
+        transition:
+            color .2s,
+            border-color .2s;
+    }
+
+
+    .reset-button:hover {
+
+        color:
+            #e2edf7;
+
+        border-color:
+            rgba(255,255,255,.22);
+    }
+
+
+    /* =====================================================
+       LIGHT MODE
+    ===================================================== */
+
+    body.light-mode {
+
+        --accent: #386c8f;
+        --accent-soft: rgba(56,108,143,.14);
+        --accent-glow: rgba(56,108,143,.25);
+
+        --white: #17242e;
+        --muted: #52626e;
+        --dim: #667984;
+        --faint: #a3b1b9;
+
+        --line: rgba(25,50,65,.18);
+
+        background-image:
+
+            linear-gradient(
+                90deg,
+                rgba(226,235,239,.76),
+                rgba(244,248,250,.30),
+                rgba(220,230,235,.72)
+            ),
+
+            linear-gradient(
+                0deg,
+                rgba(216,228,234,.70),
+                transparent 55%,
+                rgba(248,250,251,.30)
+            ),
+
+            var(--bg-image);
+    }
+
+
+    body.light-mode .top,
+    body.light-mode .search-shell,
+    body.light-mode .link {
+
+        background:
+            rgba(238,245,248,.58);
+    }
+
+
+    body.light-mode .engine {
+
+        background:
+            rgba(230,239,243,.85);
+
+        color:
+            #425666;
+    }
+
+
+    body.light-mode .engine option {
+
+        background:
+            #edf4f7;
+
+        color:
+            #17242e;
+    }
+
+
+    /* =====================================================
+       DEEP BLUE
+    ===================================================== */
+
+    body.blue-mode {
+
+        --accent: #55bfff;
+        --accent-soft: rgba(55,154,224,.18);
+        --accent-glow: rgba(55,154,224,.32);
+    }
+
+
+    /* =====================================================
+       MAROON
+    ===================================================== */
+
+    body.maroon-mode {
+
+        --accent: #e26b83;
+        --accent-soft: rgba(226,107,131,.17);
+        --accent-glow: rgba(226,107,131,.30);
+
+        --line: rgba(190,120,137,.15);
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .top {
+            padding: 0 18px;
+        }
+
+
+        .connection {
+            display: none;
+        }
+
+
+        .top-clock {
+            min-width: 120px;
+        }
+
+
+        .settings-button {
+            top: 86px;
+            right: 18px;
+        }
+
+
+        main {
+
+            width:
+                calc(100% - 36px);
+
+            min-height:
+                calc(100vh - 132px);
+        }
+
+
+        .search-area,
+        .quick {
+
+            margin-left: 0;
+        }
+
+
+        .links {
+
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+
+        .marker {
+            display: none;
+        }
+
+
+        .bottom-data {
+
+            left: 18px;
+            right: 18px;
+        }
+    }
+
+
+    @media (max-width: 480px) {
+
+        .brand small {
+            display: none;
+        }
+
+
+        .top-clock {
+
+            min-width: 108px;
+
+            font-size: 9px;
+        }
+
+
+        .engine {
+            display: none;
+        }
+
+
+        .links {
+
+            grid-template-columns:
+                1fr 1fr;
+        }
+
+
+        .link {
+            min-height: 100px;
+        }
+
+
+        .bottom-right {
+            display: none;
+        }
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- AMBIENT EFFECTS -->
+
+<div
+    class="noise"
+    id="noise"
+></div>
+
+
+<div
+    class="scanline"
+    id="scanline"
+></div>
+
+
+<div
+    class="signal-sweep"
+    id="signalSweep"
+></div>
+
+
+<!-- HEADER -->
+
+<header class="top">
+
+    <div class="brand">
+
+        <span class="brand-line"></span>
+
+        <span>Gudov</span>
+
+        <small>NEW TAB</small>
+
+    </div>
+
+
+    <div class="top-right">
+
+        <div class="connection">
+
+            <span class="connection-dot"></span>
+
+            LOCAL
+
+        </div>
+
+
+        <div class="top-clock">
+
+            <span class="clock-prefix">
+                SYS
+            </span>
+
+            <span id="topTime">
+                --:--
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- SETTINGS -->
+
+<button
+    class="settings-button"
+    id="settingsButton"
+    aria-label="Open settings"
+>
+
+    <i data-lucide="sliders-horizontal"></i>
+
+</button>
+
+
+<aside
+    class="drawer"
+    id="settingsDrawer"
+>
+
+    <div class="drawer-header">
+
+        <span class="drawer-title">
+            GUDOV / CONFIG
+        </span>
+
+
+        <button
+            class="close-settings"
+            id="closeSettings"
+            aria-label="Close settings"
+        >
+
+            <i data-lucide="x"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- APPEARANCE -->
+
+    <div class="setting-group">
+
+        <div class="setting-label">
+            Appearance
+        </div>
+
+
+        <div class="appearance-grid">
+
+            <button
+                class="appearance-option appearance-dark"
+                data-theme="dark"
+            >
+                <span>DARK MODE</span>
+            </button>
+
+
+            <button
+                class="appearance-option appearance-light"
+                data-theme="light"
+            >
+                <span>LIGHT MODE</span>
+            </button>
+
+
+            <button
+                class="appearance-option appearance-blue"
+                data-theme="blue"
+            >
+                <span>DEEP BLUE</span>
+            </button>
+
+
+            <button
+                class="appearance-option appearance-maroon"
+                data-theme="maroon"
+            >
+                <span>MAROON</span>
+            </button>
+
+        </div>
+
+
+        <label
+            class="custom-wallpaper"
+            for="wallpaperUpload"
+        >
+            + LOAD CUSTOM WALLPAPER
+        </label>
+
+
+        <input
+            type="file"
+            id="wallpaperUpload"
+            accept="image/png,image/jpeg,image/webp"
+        >
+
+    </div>
+
+
+    <!-- CLOCK -->
+
+    <div class="setting-group">
+
+        <div class="setting-label">
+            Clock
+        </div>
+
+
+        <div class="toggle-row">
+
+            <span class="toggle-name">
+                24 hour
+            </span>
+
+
+            <button
+                class="toggle active"
+                id="formatToggle"
+                aria-label="Toggle 24 hour clock"
+            ></button>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <span class="toggle-name">
+                Seconds
+            </span>
+
+
+            <button
+                class="toggle"
+                id="secondsToggle"
+                aria-label="Toggle seconds"
+            ></button>
+
+        </div>
+
+    </div>
+
+
+    <!-- INTERFACE -->
+
+    <div class="setting-group">
+
+        <div class="setting-label">
+            Interface
+        </div>
+
+
+        <div class="toggle-row">
+
+            <span class="toggle-name">
+                Scan animation
+            </span>
+
+
+            <button
+                class="toggle active"
+                id="scanToggle"
+            ></button>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <span class="toggle-name">
+                Signal sweep
+            </span>
+
+
+            <button
+                class="toggle active"
+                id="sweepToggle"
+            ></button>
+
+        </div>
+
+
+        <div class="toggle-row">
+
+            <span class="toggle-name">
+                Ambient grain
+            </span>
+
+
+            <button
+                class="toggle active"
+                id="grainToggle"
+            ></button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESET -->
+
+    <div class="setting-group">
+
+        <button
+            class="reset-button"
+            id="resetButton"
+        >
+            RESET GUDOV
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main>
+
+    <div class="marker one">
+        SYSTEM / 01
+    </div>
+
+
+    <div class="marker two">
+        NODE / ACTIVE
+    </div>
+
+
+    <div class="marker three">
+        GUDOV / 001
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <form
+        class="search-area"
+        id="searchForm"
+    >
+
+        <div class="search-shell">
+
+            <i
+                class="search-icon"
+                data-lucide="search"
+            ></i>
+
+
+            <input
+                id="search"
+                type="text"
+                placeholder="Search the web or enter a URL..."
+                autocomplete="off"
+                spellcheck="false"
+                autofocus
+            >
+
+
+            <select
+                class="engine"
+                id="engine"
+                aria-label="Search engine"
+            >
+
+                <option value="google">
+                    GOOGLE
+                </option>
+
+                <option value="duckduckgo">
+                    DUCKDUCKGO
+                </option>
+
+                <option value="bing">
+                    BING
+                </option>
+
+            </select>
+
+
+            <button
+                class="search-button"
+                type="submit"
+                aria-label="Search"
+            >
+
+                <i
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <!-- PINNED -->
+
+    <section class="quick">
+
+        <div class="quick-header">
+
+            <span></span>
+
+            Pinned
+
+            <span></span>
+
+        </div>
+
+
+        <div class="links">
+
+
+            <!-- GITHUB -->
+
+            <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link"
+            >
+
+                <div class="link-top">
+
+                    <i
+                        class="link-icon"
+                        data-lucide="github"
+                    ></i>
+
+                    <span class="link-number">
+                        01
+                    </span>
+
+                </div>
+
+
+                <div class="link-name">
+                    GitHub
+                </div>
+
+
+                <div class="link-url">
+                    github.com
+                </div>
+
+
+                <i
+                    class="link-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- YOUTUBE -->
+
+            <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link"
+            >
+
+                <div class="link-top">
+
+                    <i
+                        class="link-icon"
+                        data-lucide="play"
+                    ></i>
+
+                    <span class="link-number">
+                        02
+                    </span>
+
+                </div>
+
+
+                <div class="link-name">
+                    YouTube
+                </div>
+
+
+                <div class="link-url">
+                    youtube.com
+                </div>
+
+
+                <i
+                    class="link-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- REDDIT -->
+
+            <a
+                href="https://reddit.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link"
+            >
+
+                <div class="link-top">
+
+                    <i
+                        class="link-icon"
+                        data-lucide="message-square"
+                    ></i>
+
+                    <span class="link-number">
+                        03
+                    </span>
+
+                </div>
+
+
+                <div class="link-name">
+                    Reddit
+                </div>
+
+
+                <div class="link-url">
+                    reddit.com
+                </div>
+
+
+                <i
+                    class="link-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+
+            <!-- X -->
+
+            <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link"
+            >
+
+                <div class="link-top">
+
+                    <i
+                        class="link-icon"
+                        data-lucide="radio"
+                    ></i>
+
+                    <span class="link-number">
+                        04
+                    </span>
+
+                </div>
+
+
+                <div class="link-name">
+                    X
+                </div>
+
+
+                <div class="link-url">
+                    x.com
+                </div>
+
+
+                <i
+                    class="link-arrow"
+                    data-lucide="arrow-up-right"
+                ></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- BOTTOM -->
+
+<div class="bottom-data">
+
+    <div class="bottom-left">
+
+        <span>
+            GUDOV
+        </span>
+
+        <span class="separator"></span>
+
+        <span>
+            v0.2
+        </span>
+
+    </div>
+
+
+    <div class="bottom-right">
+
+        <span>
+            CTRL + K
+        </span>
+
+        <span class="separator"></span>
+
+        <span>
+            SEARCH
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       ICONS
+    ===================================================== */
+
+    lucide.createIcons();
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const body =
+        document.body;
+
+    const topTime =
+        document.getElementById("topTime");
+
+    const searchInput =
+        document.getElementById("search");
+
+    const searchForm =
+        document.getElementById("searchForm");
+
+    const engine =
+        document.getElementById("engine");
+
+    const drawer =
+        document.getElementById("settingsDrawer");
+
+    const scanline =
+        document.getElementById("scanline");
+
+    const signalSweep =
+        document.getElementById("signalSweep");
+
+    const noise =
+        document.getElementById("noise");
+
+
+    /* =====================================================
+       DEFAULT SETTINGS
+    ===================================================== */
+
+    const defaults = {
+
+        theme: "dark",
+
+        customWallpaper: null,
+
+        use24Hour: true,
+
+        showSeconds: false,
+
+        scan: true,
+
+        sweep: true,
+
+        grain: true
+
+    };
+
+
+    let settings = {
+
+        ...defaults,
+
+        ...JSON.parse(
+            localStorage.getItem(
+                "gudovSettings"
+            ) || "{}"
+        )
+
+    };
+
+
+    /* =====================================================
+       SAVE
+    ===================================================== */
+
+    function saveSettings() {
+
+        try {
+
+            localStorage.setItem(
+                "gudovSettings",
+                JSON.stringify(settings)
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Gudov could not save settings.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       THEME
+    ===================================================== */
+
+    function applyTheme() {
+
+        body.classList.remove(
+            "light-mode",
+            "blue-mode",
+            "maroon-mode"
+        );
+
+
+        if (
+            settings.theme === "light"
+        ) {
+
+            body.classList.add(
+                "light-mode"
+            );
+
+        }
+
+
+        if (
+            settings.theme === "blue"
+        ) {
+
+            body.classList.add(
+                "blue-mode"
+            );
+
+        }
+
+
+        if (
+            settings.theme === "maroon"
+        ) {
+
+            body.classList.add(
+                "maroon-mode"
+            );
+
+        }
+
+
+        document
+            .querySelectorAll(
+                ".appearance-option"
+            )
+            .forEach(button => {
+
+                button.classList.toggle(
+                    "selected",
+                    button.dataset.theme ===
+                    settings.theme
+                );
+
+            });
+
+    }
+
+
+    applyTheme();
+
+
+    /* =====================================================
+       CUSTOM WALLPAPER
+    ===================================================== */
+
+    const wallpaperUpload =
+        document.getElementById(
+            "wallpaperUpload"
+        );
+
+
+    wallpaperUpload.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                alert(
+                    "Please choose an image."
+                );
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    settings.customWallpaper =
+                        event.target.result;
+
+
+                    saveSettings();
+
+                    body.style.setProperty(
+                        "--bg-image",
+                        `url("${event.target.result}")`
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       RESTORE CUSTOM WALLPAPER
+    ===================================================== */
+
+    if (
+        settings.customWallpaper
+    ) {
+
+        body.style.setProperty(
+            "--bg-image",
+            `url("${settings.customWallpaper}")`
+        );
+
+    }
+
+
+    /* =====================================================
+       APPEARANCE BUTTONS
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".appearance-option"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    settings.theme =
+                        this.dataset.theme;
+
+                    saveSettings();
+
+                    applyTheme();
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       CLOCK
+    ===================================================== */
+
+    function updateClock() {
+
+        const now =
+            new Date();
+
+
+        const options = {
+
+            hour: "2-digit",
+
+            minute: "2-digit",
+
+            hour12:
+                !settings.use24Hour
+
+        };
+
+
+        if (
+            settings.showSeconds
+        ) {
+
+            options.second =
+                "2-digit";
+
+        }
+
+
+        topTime.textContent =
+            now.toLocaleTimeString(
+                [],
+                options
+            );
+
+    }
+
+
+    updateClock();
+
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+
+    /* =====================================================
+       SEARCH ENGINES
+    ===================================================== */
+
+    const searchEngines = {
+
+        google:
+            "https://www.google.com/search?q=",
+
+        duckduckgo:
+            "https://duckduckgo.com/?q=",
+
+        bing:
+            "https://www.bing.com/search?q="
+
+    };
+
+
+    searchForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const query =
+                searchInput.value.trim();
+
+
+            if (!query) {
+
+                searchInput.focus();
+
+                return;
+
+            }
+
+
+            /* Direct URL */
+
+            if (
+                query.startsWith(
+                    "https://"
+                ) ||
+                query.startsWith(
+                    "http://"
+                )
+            ) {
+
+                window.location.href =
+                    query;
+
+                return;
+
+            }
+
+
+            /* Domain */
+
+            const isURL =
+                /^[\w-]+(\.[\w-]+)+(\/.*)?$/i
+                    .test(query);
+
+
+            if (
+                isURL &&
+                !query.includes(" ")
+            ) {
+
+                window.location.href =
+                    "https://" + query;
+
+                return;
+
+            }
+
+
+            /* Search */
+
+            const base =
+                searchEngines[
+                    engine.value
+                ] ||
+                searchEngines.google;
+
+
+            window.location.href =
+                base +
+                encodeURIComponent(
+                    query
+                );
+
+        }
+    );
+
+
+    /* =====================================================
+       CTRL + K
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                (event.ctrlKey ||
+                 event.metaKey) &&
+                event.key.toLowerCase() === "k"
+            ) {
+
+                event.preventDefault();
+
+                searchInput.focus();
+
+                searchInput.select();
+
+            }
+
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                drawer.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       MOUSE LIGHT
+    ===================================================== */
+
+    document.addEventListener(
+        "mousemove",
+        function(event) {
+
+            body.style.setProperty(
+                "--cursor-x",
+                `${event.clientX}px`
+            );
+
+            body.style.setProperty(
+                "--cursor-y",
+                `${event.clientY}px`
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       SETTINGS
+    ===================================================== */
+
+    document
+        .getElementById(
+            "settingsButton"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                drawer.classList.add(
+                    "open"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "closeSettings"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                drawer.classList.remove(
+                    "open"
+                );
+
+            }
+        );
+
+
+    /* =====================================================
+       24 HOUR
+    ===================================================== */
+
+    const formatToggle =
+        document.getElementById(
+            "formatToggle"
+        );
+
+
+    formatToggle.classList.toggle(
+        "active",
+        settings.use24Hour
+    );
+
+
+    formatToggle.addEventListener(
+        "click",
+        function() {
+
+            settings.use24Hour =
+                !settings.use24Hour;
+
+            this.classList.toggle(
+                "active",
+                settings.use24Hour
+            );
+
+            saveSettings();
+
+            updateClock();
+
+        }
+    );
+
+
+    /* =====================================================
+       SECONDS
+    ===================================================== */
+
+    const secondsToggle =
+        document.getElementById(
+            "secondsToggle"
+        );
+
+
+    secondsToggle.classList.toggle(
+        "active",
+        settings.showSeconds
+    );
+
+
+    secondsToggle.addEventListener(
+        "click",
+        function() {
+
+            settings.showSeconds =
+                !settings.showSeconds;
+
+            this.classList.toggle(
+                "active",
+                settings.showSeconds
+            );
+
+            saveSettings();
+
+            updateClock();
+
+        }
+    );
+
+
+    /* =====================================================
+       SCAN
+    ===================================================== */
+
+    const scanToggle =
+        document.getElementById(
+            "scanToggle"
+        );
+
+
+    scanToggle.classList.toggle(
+        "active",
+        settings.scan
+    );
+
+
+    scanline.style.display =
+        settings.scan
+            ? "block"
+            : "none";
+
+
+    scanToggle.addEventListener(
+        "click",
+        function() {
+
+            settings.scan =
+                !settings.scan;
+
+            this.classList.toggle(
+                "active",
+                settings.scan
+            );
+
+
+            scanline.style.display =
+                settings.scan
+                    ? "block"
+                    : "none";
+
+
+            saveSettings();
+
+        }
+    );
+
+
+    /* =====================================================
+       SIGNAL SWEEP
+    ===================================================== */
+
+    const sweepToggle =
+        document.getElementById(
+            "sweepToggle"
+        );
+
+
+    sweepToggle.classList.toggle(
+        "active",
+        settings.sweep
+    );
+
+
+    signalSweep.style.display =
+        settings.sweep
+            ? "block"
+            : "none";
+
+
+    sweepToggle.addEventListener(
+        "click",
+        function() {
+
+            settings.sweep =
+                !settings.sweep;
+
+            this.classList.toggle(
+                "active",
+                settings.sweep
+            );
+
+
+            signalSweep.style.display =
+                settings.sweep
+                    ? "block"
+                    : "none";
+
+
+            saveSettings();
+
+        }
+    );
+
+
+    /* =====================================================
+       GRAIN
+    ===================================================== */
+
+    const grainToggle =
+        document.getElementById(
+            "grainToggle"
+        );
+
+
+    grainToggle.classList.toggle(
+        "active",
+        settings.grain
+    );
+
+
+    noise.style.display =
+        settings.grain
+            ? "block"
+            : "none";
+
+
+    grainToggle.addEventListener(
+        "click",
+        function() {
+
+            settings.grain =
+                !settings.grain;
+
+            this.classList.toggle(
+                "active",
+                settings.grain
+            );
+
+
+            noise.style.display =
+                settings.grain
+                    ? "block"
+                    : "none";
+
+
+            saveSettings();
+
+        }
+    );
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    document
+        .getElementById(
+            "resetButton"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                const confirmed =
+                    confirm(
+                        "Reset all Gudov settings?"
+                    );
+
+
+                if (!confirmed) {
+                    return;
+                }
+
+
+                settings =
+                    { ...defaults };
+
+
+                saveSettings();
+
+
+                body.style.setProperty(
+                    "--bg-image",
+                    'url("assets/background.jpg")'
+                );
+
+
+                formatToggle.classList.add(
+                    "active"
+                );
+
+                secondsToggle.classList.remove(
+                    "active"
+                );
+
+                scanToggle.classList.add(
+                    "active"
+                );
+
+                sweepToggle.classList.add(
+                    "active"
+                );
+
+                grainToggle.classList.add(
+                    "active"
+                );
+
+
+                scanline.style.display =
+                    "block";
+
+                signalSweep.style.display =
+                    "block";
+
+                noise.style.display =
+                    "block";
+
+
+                applyTheme();
+
+                updateClock();
+
+            }
+        );
+
+
+</script>
+```
+
+</body>
+
+</html>
