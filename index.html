@@ -1,54 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Gudov</title>
-
-
-    <!-- Fonts -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gudov — Webpulse Engine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <!-- Icons -->
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-
-        /* =====================================================
-           CORE
-        ===================================================== */
-
         :root {
-
-            --blue: #5dbbff;
-            --blue-soft: rgba(93, 187, 255, 0.35);
-
-            --white: #edf6ff;
-            --muted: #8394a8;
-            --dim: #425163;
-
-            --line: rgba(145, 177, 207, 0.14);
-
-            --panel: rgba(3, 10, 18, 0.68);
-
+            --bg-black: #04060a;
+            --accent-cyan: #00f0ff;
+            --accent-maroon: #800020;
+            --accent-magenta: #ff0055;
+            --accent-glow: rgba(0, 240, 255, 0.4);
+            --border-tech: rgba(0, 240, 255, 0.25);
+            --card-dark: rgba(8, 12, 20, 0.85);
+            --text-primary: #f1f5f9;
+            --text-dim: #64748b;
         }
 
+        /* Theme Variants */
+        body.theme-light {
+            --bg-black: #e2e8f0;
+            --card-dark: rgba(255, 255, 255, 0.85);
+            --text-primary: #0f172a;
+            --text-dim: #475569;
+            --border-tech: rgba(0, 150, 255, 0.3);
+            --accent-cyan: #0066ff;
+        }
+
+        body.theme-maroon {
+            --accent-cyan: #ff2a6d;
+            --border-tech: rgba(255, 0, 85, 0.35);
+            --accent-glow: rgba(255, 0, 85, 0.4);
+        }
 
         * {
             box-sizing: border-box;
@@ -56,2387 +42,626 @@
             padding: 0;
         }
 
-
-        html,
         body {
-            width: 100%;
-            min-height: 100%;
-        }
-
-
-        body {
-
+            background-color: var(--bg-black);
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', system-ui, sans-serif;
             min-height: 100vh;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(2, 7, 14, .62),
-                    rgba(2, 7, 14, .20),
-                    rgba(2, 7, 14, .55)
-                ),
-
-                linear-gradient(
-                    0deg,
-                    rgba(2, 7, 14, .78),
-                    transparent 55%,
-                    rgba(2, 7, 14, .25)
-                ),
-
-                url("assets/background.jpg");
-
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-
-            color: var(--white);
-
-            font-family:
-                "Inter",
-                system-ui,
-                sans-serif;
-
-            overflow-x: hidden;
-        }
-
-
-        /* =====================================================
-           AMBIENT LAYER
-        ===================================================== */
-
-        .noise {
-
-            position: fixed;
-
-            inset: 0;
-
-            pointer-events: none;
-
-            z-index: 20;
-
-            opacity: .035;
-
-            background-image:
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-        }
-
-
-        /* =====================================================
-           SCAN LINE
-        ===================================================== */
-
-        .scanline {
-
-            position: fixed;
-
-            left: 0;
-            right: 0;
-
-            height: 1px;
-
-            top: -10px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(93,187,255,.25),
-                    transparent
-                );
-
-            box-shadow:
-                0 0 14px rgba(93,187,255,.18);
-
-            pointer-events: none;
-
-            z-index: 19;
-
-            animation:
-                scan 9s linear infinite;
-        }
-
-
-        @keyframes scan {
-
-            0% {
-                top: -10px;
-                opacity: 0;
-            }
-
-            10% {
-                opacity: .5;
-            }
-
-            90% {
-                opacity: .5;
-            }
-
-            100% {
-                top: 100%;
-                opacity: 0;
-            }
-
-        }
-
-
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
-
-        .top {
-
-            height: 70px;
-
             display: flex;
-
+            flex-direction: column;
             align-items: center;
-
             justify-content: space-between;
-
-            padding:
-                0 30px;
-
-            border-bottom:
-                1px solid var(--line);
-
-            background:
-                rgba(2, 7, 13, .52);
-
-            backdrop-filter:
-                blur(14px);
-
+            overflow: hidden;
             position: relative;
+            transition: background-color 0.3s ease;
+        }
 
+        /* Particle Wave Canvas */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Top HUD Header */
+        .top-bar {
+            width: 100%;
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             z-index: 10;
         }
 
-
-        .brand {
-
+        .brand-tag {
             display: flex;
-
             align-items: center;
-
-            gap: 12px;
-
-            font-size: 17px;
-
-            font-weight: 500;
-
-            letter-spacing: -.03em;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
         }
 
-
-        .brand-line {
-
-            width: 22px;
-
-            height: 1px;
-
-            background:
-                var(--blue);
-
-            box-shadow:
-                0 0 9px var(--blue);
-        }
-
-
-        .brand small {
-
-            color: var(--dim);
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 9px;
-
-            margin-left: 4px;
-
-            letter-spacing: .12em;
-        }
-
-
-        .top-right {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 18px;
-
-            color: var(--dim);
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 10px;
-
-            letter-spacing: .08em;
-        }
-
-
-        .connection {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-        }
-
-
-        .connection-dot {
-
-            width: 5px;
-            height: 5px;
-
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
             border-radius: 50%;
-
-            background: #65d6a1;
-
-            box-shadow:
-                0 0 9px #65d6a1;
-
-            animation:
-                pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 12px var(--accent-cyan);
+            animation: pulse 2s infinite;
         }
-
 
         @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: .45;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.75); }
         }
 
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
-
-        main {
-
-            position: relative;
-
-            width:
-                min(1180px, calc(100% - 70px));
-
-            min-height:
-                calc(100vh - 132px);
-
-            margin: auto;
-
+        .hud-right {
             display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
+        .hud-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            background: var(--card-dark);
+            border: 1px solid var(--border-tech);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .hud-clock {
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .weather-val {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* Main Center Search Area */
+        .main-container {
+            display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 680px;
+            padding: 2rem;
+            z-index: 10;
+        }
 
+        .tech-status-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .tech-status-line span {
+            color: var(--accent-cyan);
+        }
+
+        /* Tech Cyber Search Card */
+        .search-card {
+            width: 100%;
+            background: var(--card-dark);
+            border: 1px solid var(--border-tech);
+            padding: 0.5rem;
+            border-radius: 6px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .search-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; width: 8px; height: 8px;
+            border-top: 2px solid var(--accent-cyan);
+            border-left: 2px solid var(--accent-cyan);
+        }
+
+        .search-card::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px; width: 8px; height: 8px;
+            border-bottom: 2px solid var(--accent-cyan);
+            border-right: 2px solid var(--accent-cyan);
+        }
+
+        .search-card:focus-within {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .engine-select {
+            background: rgba(0, 240, 255, 0.06);
+            border: 1px solid var(--border-tech);
+            color: var(--accent-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.6rem 0.8rem;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+        }
+
+        .engine-select option {
+            background: #080c14;
+            color: #fff;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            font-family: 'Space Grotesk', sans-serif;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* Pop-up Launcher Trigger */
+        .launch-btn {
+            margin-top: 2rem;
+            background: rgba(0, 240, 255, 0.04);
+            border: 1px solid var(--border-tech);
+            color: var(--accent-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.12em;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .launch-btn:hover {
+            background: var(--accent-cyan);
+            color: #04060a;
+            box-shadow: 0 0 25px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Pop-up Launcher */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(4, 6, 10, 0.88);
+            backdrop-filter: blur(14px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--card-dark);
+            border: 1px solid var(--border-tech);
+            width: 90%;
+            max-width: 540px;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-tech);
+            padding-bottom: 0.75rem;
+        }
+
+        .modal-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            letter-spacing: 0.1em;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        .close-btn:hover { color: var(--accent-cyan); }
+
+        /* Themes Switcher Grid */
+        .theme-section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .theme-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-tech);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* Aligned Shortcuts Grid */
+        .popup-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.85rem;
+        }
+
+        .tech-tile {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-tech);
+            padding: 0.85rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tile:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 240, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .tile-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tile-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+            display: flex;
+            align-items: center;
             justify-content: center;
         }
 
-
-        /* =====================================================
-           LITTLE TECH MARKERS
-        ===================================================== */
-
-        .marker {
-
-            position: absolute;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            color: rgba(166, 194, 219, .38);
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-
-            letter-spacing: .13em;
-
-            text-transform: uppercase;
-
-            pointer-events: none;
+        .tile-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-
-        .marker::before {
-
-            content: "";
-
-            width: 18px;
-
-            height: 1px;
-
-            background:
-                var(--blue-soft);
+        .tile-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
         }
 
-
-        .marker.one {
-            top: 16%;
-            left: 0;
+        .footer-bar {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            z-index: 10;
         }
-
-
-        .marker.two {
-            right: 0;
-            top: 25%;
-        }
-
-
-        .marker.three {
-            left: 4%;
-            bottom: 13%;
-        }
-
-
-        /* =====================================================
-           CLOCK
-        ===================================================== */
-
-        .clock-block {
-
-            position: relative;
-
-            width: fit-content;
-
-            margin-left:
-                clamp(0px, 8vw, 100px);
-
-            margin-bottom: 42px;
-        }
-
-
-        .clock-label {
-
-            margin-bottom: 9px;
-
-            color: var(--blue);
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 9px;
-
-            letter-spacing: .25em;
-
-            text-transform: uppercase;
-
-            opacity: .8;
-        }
-
-
-        #clock {
-
-            font-size:
-                clamp(5rem, 11vw, 9rem);
-
-            line-height: .8;
-
-            font-weight: 300;
-
-            letter-spacing: -.075em;
-
-            color: var(--white);
-
-            text-shadow:
-                0 0 40px rgba(93,187,255,.08);
-        }
-
-
-        #date {
-
-            margin-top: 20px;
-
-            color: #8192a7;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 10px;
-
-            letter-spacing: .18em;
-
-            text-transform: uppercase;
-        }
-
-
-        /* =====================================================
-           SEARCH
-        ===================================================== */
-
-        .search-area {
-
-            width:
-                min(760px, 100%);
-
-            margin-left:
-                clamp(0px, 16vw, 190px);
-
-            position: relative;
-        }
-
-
-        .search-shell {
-
-            height: 62px;
-
-            display: flex;
-
-            align-items: center;
-
-            position: relative;
-
-            border:
-                1px solid
-                rgba(150,190,225,.23);
-
-            background:
-                rgba(2, 8, 16, .70);
-
-            backdrop-filter:
-                blur(18px);
-
-            transition:
-                border-color .25s,
-                box-shadow .25s;
-        }
-
-
-        /* Corner details */
-
-        .search-shell::before,
-        .search-shell::after {
-
-            content: "";
-
-            position: absolute;
-
-            width: 10px;
-            height: 10px;
-
-            pointer-events: none;
-        }
-
-
-        .search-shell::before {
-
-            top: -1px;
-            left: -1px;
-
-            border-top:
-                1px solid var(--blue);
-
-            border-left:
-                1px solid var(--blue);
-        }
-
-
-        .search-shell::after {
-
-            right: -1px;
-            bottom: -1px;
-
-            border-right:
-                1px solid var(--blue);
-
-            border-bottom:
-                1px solid var(--blue);
-        }
-
-
-        .search-shell:focus-within {
-
-            border-color:
-                rgba(93,187,255,.55);
-
-            box-shadow:
-                0 0 30px
-                rgba(93,187,255,.08);
-        }
-
-
-        .search-icon {
-
-            width: 18px;
-
-            margin:
-                0 15px 0 19px;
-
-            color:
-                var(--blue);
-
-            opacity: .75;
-        }
-
-
-        #search {
-
-            flex: 1;
-
-            height: 100%;
-
-            border: 0;
-            outline: 0;
-
-            background:
-                transparent;
-
-            color: var(--white);
-
-            font-family:
-                "Inter",
-                sans-serif;
-
-            font-size: 14px;
-        }
-
-
-        #search::placeholder {
-            color: #5d7085;
-        }
-
-
-        .engine {
-
-            height: 34px;
-
-            padding:
-                0 10px;
-
-            margin-right: 8px;
-
-            border:
-                1px solid var(--line);
-
-            border-radius: 4px;
-
-            background:
-                rgba(8,17,29,.8);
-
-            color: #8ca0b5;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 9px;
-
-            outline: none;
-
-            cursor: pointer;
-        }
-
-
-        .engine option {
-
-            background: #07101b;
-
-            color: white;
-        }
-
-
-        .search-button {
-
-            width: 42px;
-            height: 42px;
-
-            margin-right: 9px;
-
-            display: grid;
-
-            place-items: center;
-
-            border: 1px solid
-                rgba(93,187,255,.25);
-
-            background:
-                rgba(93,187,255,.07);
-
-            color:
-                var(--blue);
-
-            cursor: pointer;
-
-            transition:
-                background .2s,
-                border-color .2s,
-                transform .2s;
-        }
-
-
-        .search-button:hover {
-
-            background:
-                rgba(93,187,255,.15);
-
-            border-color:
-                rgba(93,187,255,.55);
-
-            transform:
-                translateX(2px);
-        }
-
-
-        /* =====================================================
-           QUICK ACCESS
-        ===================================================== */
-
-        .quick {
-
-            width:
-                min(760px, 100%);
-
-            margin-left:
-                clamp(0px, 16vw, 190px);
-
-            margin-top: 25px;
-        }
-
-
-        .quick-header {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            margin-bottom: 10px;
-
-            color: #60738a;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-
-            letter-spacing: .2em;
-
-            text-transform: uppercase;
-        }
-
-
-        .quick-header span {
-
-            width: 25px;
-
-            height: 1px;
-
-            background:
-                var(--line);
-        }
-
-
-        .links {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            border-top:
-                1px solid var(--line);
-
-            border-left:
-                1px solid var(--line);
-        }
-
-
-        .link {
-
-            position: relative;
-
-            min-height: 86px;
-
-            padding:
-                17px 18px;
-
-            border-right:
-                1px solid var(--line);
-
-            border-bottom:
-                1px solid var(--line);
-
-            background:
-                rgba(3,10,18,.42);
-
-            color: var(--white);
-
-            text-decoration: none;
-
-            overflow: hidden;
-
-            transition:
-                background .25s,
-                border-color .25s;
-        }
-
-
-        .link:hover {
-
-            background:
-                rgba(5,18,31,.70);
-
-            border-color:
-                rgba(93,187,255,.3);
-        }
-
-
-        /* Animated technical line */
-
-        .link::before {
-
-            content: "";
-
-            position: absolute;
-
-            left: 0;
-            bottom: 0;
-
-            width: 0;
-            height: 1px;
-
-            background:
-                var(--blue);
-
-            box-shadow:
-                0 0 8px
-                rgba(93,187,255,.5);
-
-            transition:
-                width .35s ease;
-        }
-
-
-        .link:hover::before {
-            width: 100%;
-        }
-
-
-        /* Number */
-
-        .link-number {
-
-            position: absolute;
-
-            right: 10px;
-            top: 8px;
-
-            color: #33465b;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-        }
-
-
-        .link-icon {
-
-            width: 20px;
-
-            color: #8297ae;
-
-            margin-bottom: 13px;
-
-            transition:
-                color .25s,
-                transform .25s;
-        }
-
-
-        .link:hover .link-icon {
-
-            color:
-                var(--blue);
-
-            transform:
-                translateY(-2px)
-                scale(1.12);
-        }
-
-
-        .link-name {
-
-            font-size: 12px;
-
-            font-weight: 500;
-        }
-
-
-        .link-url {
-
-            margin-top: 4px;
-
-            color: #52667c;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-        }
-
-
-        .link-arrow {
-
-            position: absolute;
-
-            right: 12px;
-            bottom: 10px;
-
-            width: 12px;
-
-            color: #465b72;
-
-            opacity: 0;
-
-            transform:
-                translate(-4px, 4px);
-
-            transition:
-                opacity .2s,
-                transform .2s;
-        }
-
-
-        .link:hover .link-arrow {
-
-            opacity: 1;
-
-            color:
-                var(--blue);
-
-            transform:
-                translate(0,0);
-        }
-
-
-        /* =====================================================
-           BOTTOM DATA
-        ===================================================== */
-
-        .bottom-data {
-
-            position: fixed;
-
-            bottom: 20px;
-
-            left: 30px;
-            right: 30px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            color: #43566c;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-
-            letter-spacing: .12em;
-
-            z-index: 5;
-        }
-
-
-        .bottom-left,
-        .bottom-right {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 14px;
-        }
-
-
-        .separator {
-
-            width: 18px;
-
-            height: 1px;
-
-            background:
-                var(--line);
-        }
-
-
-        /* =====================================================
-           SETTINGS DRAWER
-        ===================================================== */
-
-        .settings-button {
-
-            position: fixed;
-
-            right: 26px;
-            top: 87px;
-
-            width: 38px;
-            height: 38px;
-
-            display: grid;
-
-            place-items: center;
-
-            border:
-                1px solid var(--line);
-
-            background:
-                rgba(3,10,18,.55);
-
-            color:
-                #71859b;
-
-            cursor: pointer;
-
-            z-index: 30;
-
-            transition:
-                color .2s,
-                border-color .2s,
-                transform .2s;
-        }
-
-
-        .settings-button:hover {
-
-            color:
-                var(--blue);
-
-            border-color:
-                rgba(93,187,255,.4);
-
-            transform:
-                rotate(20deg);
-        }
-
-
-        .drawer {
-
-            position: fixed;
-
-            right: 0;
-            top: 0;
-            bottom: 0;
-
-            width:
-                min(360px, 90vw);
-
-            padding: 30px;
-
-            background:
-                rgba(3,9,17,.96);
-
-            border-left:
-                1px solid var(--line);
-
-            backdrop-filter:
-                blur(25px);
-
-            z-index: 40;
-
-            transform:
-                translateX(100%);
-
-            transition:
-                transform .35s
-                cubic-bezier(.16,1,.3,1);
-        }
-
-
-        .drawer.open {
-
-            transform:
-                translateX(0);
-        }
-
-
-        .drawer-header {
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            align-items: center;
-
-            padding-bottom: 20px;
-
-            border-bottom:
-                1px solid var(--line);
-
-            margin-bottom: 28px;
-        }
-
-
-        .drawer-title {
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 10px;
-
-            letter-spacing: .2em;
-
-            color:
-                var(--blue);
-        }
-
-
-        .close-settings {
-
-            width: 30px;
-            height: 30px;
-
-            display: grid;
-
-            place-items: center;
-
-            background:
-                transparent;
-
-            border:
-                1px solid var(--line);
-
-            color:
-                var(--muted);
-
-            cursor: pointer;
-        }
-
-
-        .setting-group {
-
-            margin-bottom: 30px;
-        }
-
-
-        .setting-label {
-
-            margin-bottom: 13px;
-
-            color:
-                #52667b;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-
-            letter-spacing: .2em;
-
-            text-transform: uppercase;
-        }
-
-
-        .theme-buttons {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap: 7px;
-        }
-
-
-        .theme-button {
-
-            height: 50px;
-
-            border:
-                1px solid var(--line);
-
-            background:
-                #07101b;
-
-            color:
-                #71859b;
-
-            cursor: pointer;
-
-            font-family:
-                "JetBrains Mono",
-                monospace;
-
-            font-size: 8px;
-
-            transition:
-                border-color .2s,
-                color .2s;
-        }
-
-
-        .theme-button:hover,
-        .theme-button.selected {
-
-            border-color:
-                rgba(93,187,255,.45);
-
-            color:
-                var(--blue);
-        }
-
-
-        .toggle-row {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            padding:
-                13px 0;
-
-            border-bottom:
-                1px solid rgba(145,177,207,.07);
-        }
-
-
-        .toggle-name {
-
-            color:
-                #a1b0c0;
-
-            font-size: 11px;
-        }
-
-
-        .toggle {
-
-            position: relative;
-
-            width: 32px;
-            height: 17px;
-
-            border:
-                1px solid #334457;
-
-            background:
-                #0b1420;
-
-            cursor: pointer;
-
-            transition:
-                background .2s,
-                border-color .2s;
-        }
-
-
-        .toggle::after {
-
-            content: "";
-
-            position: absolute;
-
-            width: 9px;
-            height: 9px;
-
-            left: 3px;
-            top: 3px;
-
-            background:
-                #607389;
-
-            transition:
-                transform .2s,
-                background .2s;
-        }
-
-
-        .toggle.active {
-
-            border-color:
-                rgba(93,187,255,.5);
-
-            background:
-                rgba(93,187,255,.12);
-        }
-
-
-        .toggle.active::after {
-
-            transform:
-                translateX(15px);
-
-            background:
-                var(--blue);
-
-            box-shadow:
-                0 0 8px
-                rgba(93,187,255,.5);
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width: 800px) {
-
-            .top {
-                padding: 0 18px;
-            }
-
-            .top-right {
-                display: none;
-            }
-
-            .settings-button {
-                top: 86px;
-                right: 18px;
-            }
-
-            main {
-                width:
-                    calc(100% - 36px);
-
-                min-height:
-                    calc(100vh - 132px);
-            }
-
-            .clock-block {
-                margin-left: 0;
-            }
-
-            .search-area,
-            .quick {
-                margin-left: 0;
-            }
-
-            .links {
-                grid-template-columns:
-                    repeat(2,1fr);
-            }
-
-            .marker {
-                display: none;
-            }
-
-            .bottom-data {
-                left: 18px;
-                right: 18px;
-            }
-
-        }
-
-
-        @media (max-width: 480px) {
-
-            #clock {
-                font-size: 4.4rem;
-            }
-
-            .search-shell {
-                height: 58px;
-            }
-
-            .engine {
-                display: none;
-            }
-
-            .links {
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-            .link {
-                min-height: 95px;
-            }
-
-            .bottom-right {
-                display: none;
-            }
-
-        }
-
     </style>
-
 </head>
+<body class="theme-dark">
 
+    <canvas id="particle-canvas"></canvas>
 
-<body>
-
-
-    <!-- Ambient effects -->
-
-    <div class="noise"></div>
-
-    <div class="scanline"></div>
-
-
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
-
-    <header class="top">
-
-        <div class="brand">
-
-            <span class="brand-line"></span>
-
-            <span>Gudov</span>
-
-            <small>NEW TAB</small>
-
+    <!-- Top HUD Bar -->
+    <div class="top-bar">
+        <div class="brand-tag">
+            <div class="brand-dot"></div>
+            <span>GUDOV // WEBPULSE</span>
         </div>
-
-
-        <div class="top-right">
-
-            <div class="connection">
-
-                <span class="connection-dot"></span>
-
-                LOCAL
-
+        
+        <div class="hud-right">
+            <!-- Relocated Tech HUD Clock -->
+            <div class="hud-box">
+                <span>TIME:</span>
+                <span class="hud-clock" id="top-clock">00:00:00</span>
             </div>
 
-            <span id="topTime">
-                --:--
-            </span>
-
+            <!-- Weather Widget -->
+            <div class="hud-box">
+                <span id="weather-city">NODE_LOCATING...</span>
+                <span class="weather-val" id="weather-temp">--°C</span>
+            </div>
         </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         SETTINGS
-    ====================================================== -->
-
-    <button
-        class="settings-button"
-        id="settingsButton"
-        aria-label="Open settings"
-    >
-
-        <i data-lucide="sliders-horizontal"></i>
-
-    </button>
-
-
-    <aside
-        class="drawer"
-        id="settingsDrawer"
-    >
-
-        <div class="drawer-header">
-
-            <span class="drawer-title">
-                GUDOV / CONFIG
-            </span>
-
-            <button
-                class="close-settings"
-                id="closeSettings"
-            >
-
-                <i data-lucide="x"></i>
-
-            </button>
-
-        </div>
-
-
-        <!-- Appearance -->
-
-        <div class="setting-group">
-
-            <div class="setting-label">
-                Appearance
-            </div>
-
-
-            <div class="theme-buttons">
-
-                <button
-                    class="theme-button selected"
-                    data-theme="space"
-                >
-                    SPACE
-                </button>
-
-                <button
-                    class="theme-button"
-                    data-theme="midnight"
-                >
-                    DARK
-                </button>
-
-                <button
-                    class="theme-button"
-                    data-theme="blue"
-                >
-                    BLUE
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- Clock -->
-
-        <div class="setting-group">
-
-            <div class="setting-label">
-                Clock
-            </div>
-
-
-            <div class="toggle-row">
-
-                <span class="toggle-name">
-                    24 hour
-                </span>
-
-                <button
-                    class="toggle active"
-                    id="formatToggle"
-                ></button>
-
-            </div>
-
-
-            <div class="toggle-row">
-
-                <span class="toggle-name">
-                    Seconds
-                </span>
-
-                <button
-                    class="toggle"
-                    id="secondsToggle"
-                ></button>
-
-            </div>
-
-        </div>
-
-
-        <!-- Interface -->
-
-        <div class="setting-group">
-
-            <div class="setting-label">
-                Interface
-            </div>
-
-
-            <div class="toggle-row">
-
-                <span class="toggle-name">
-                    Scan animation
-                </span>
-
-                <button
-                    class="toggle active"
-                    id="scanToggle"
-                ></button>
-
-            </div>
-
-
-            <div class="toggle-row">
-
-                <span class="toggle-name">
-                    Ambient grain
-                </span>
-
-                <button
-                    class="toggle active"
-                    id="grainToggle"
-                ></button>
-
-            </div>
-
-        </div>
-
-    </aside>
-
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <main>
-
-
-        <!-- Technical markers -->
-
-        <div class="marker one">
-            SYSTEM / 01
-        </div>
-
-        <div class="marker two">
-            NODE / ACTIVE
-        </div>
-
-        <div class="marker three">
-            GUDOV / 001
-        </div>
-
-
-        <!-- =================================================
-             CLOCK
-        ================================================== -->
-
-        <section class="clock-block">
-
-            <div class="clock-label">
-                Local time
-            </div>
-
-
-            <div id="clock">
-                00:00
-            </div>
-
-
-            <div id="date">
-                Loading...
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SEARCH
-        ================================================== -->
-
-        <form
-            class="search-area"
-            id="searchForm"
-        >
-
-            <div class="search-shell">
-
-                <i
-                    class="search-icon"
-                    data-lucide="search"
-                ></i>
-
-
-                <input
-                    id="search"
-                    type="text"
-                    placeholder="Search the web or enter a URL..."
-                    autocomplete="off"
-                    spellcheck="false"
-                    autofocus
-                >
-
-
-                <select
-                    class="engine"
-                    id="engine"
-                    aria-label="Search engine"
-                >
-
-                    <option value="google">
-                        GOOGLE
-                    </option>
-
-                    <option value="duckduckgo">
-                        DUCKDUCKGO
-                    </option>
-
-                    <option value="bing">
-                        BING
-                    </option>
-
-                    <option value="youtube">
-                        YOUTUBE
-                    </option>
-
-                </select>
-
-
-                <button
-                    class="search-button"
-                    type="submit"
-                    aria-label="Search"
-                >
-
-                    <i data-lucide="arrow-up-right"></i>
-
-                </button>
-
-            </div>
-
-        </form>
-
-
-        <!-- =================================================
-             QUICK ACCESS
-        ================================================== -->
-
-        <section class="quick">
-
-            <div class="quick-header">
-
-                <span></span>
-
-                Pinned
-
-                <span></span>
-
-            </div>
-
-
-            <div class="links">
-
-
-                <!-- GitHub -->
-
-                <a
-                    href="https://github.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link"
-                >
-
-                    <span class="link-number">
-                        01
-                    </span>
-
-
-                    <i
-                        class="link-icon"
-                        data-lucide="github"
-                    ></i>
-
-
-                    <div class="link-name">
-                        GitHub
-                    </div>
-
-
-                    <div class="link-url">
-                        github.com
-                    </div>
-
-
-                    <i
-                        class="link-arrow"
-                        data-lucide="arrow-up-right"
-                    ></i>
-
-                </a>
-
-
-                <!-- YouTube -->
-
-                <a
-                    href="https://youtube.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link"
-                >
-
-                    <span class="link-number">
-                        02
-                    </span>
-
-
-                    <i
-                        class="link-icon"
-                        data-lucide="play"
-                    ></i>
-
-
-                    <div class="link-name">
-                        YouTube
-                    </div>
-
-
-                    <div class="link-url">
-                        youtube.com
-                    </div>
-
-
-                    <i
-                        class="link-arrow"
-                        data-lucide="arrow-up-right"
-                    ></i>
-
-                </a>
-
-
-                <!-- Reddit -->
-
-                <a
-                    href="https://reddit.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link"
-                >
-
-                    <span class="link-number">
-                        03
-                    </span>
-
-
-                    <i
-                        class="link-icon"
-                        data-lucide="message-square"
-                    ></i>
-
-
-                    <div class="link-name">
-                        Reddit
-                    </div>
-
-
-                    <div class="link-url">
-                        reddit.com
-                    </div>
-
-
-                    <i
-                        class="link-arrow"
-                        data-lucide="arrow-up-right"
-                    ></i>
-
-                </a>
-
-
-                <!-- X -->
-
-                <a
-                    href="https://x.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link"
-                >
-
-                    <span class="link-number">
-                        04
-                    </span>
-
-
-                    <i
-                        class="link-icon"
-                        data-lucide="radio"
-                    ></i>
-
-
-                    <div class="link-name">
-                        X
-                    </div>
-
-
-                    <div class="link-url">
-                        x.com
-                    </div>
-
-
-                    <i
-                        class="link-arrow"
-                        data-lucide="arrow-up-right"
-                    ></i>
-
-                </a>
-
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- =====================================================
-         BOTTOM DATA
-    ====================================================== -->
-
-    <div class="bottom-data">
-
-        <div class="bottom-left">
-
-            <span>
-                GUDOV
-            </span>
-
-            <span class="separator"></span>
-
-            <span>
-                WEBPULSE
-            </span>
-
-            <span class="separator"></span>
-
-            <span>
-                v0.1
-            </span>
-
-        </div>
-
-
-        <div class="bottom-right">
-
-            <span>
-                CTRL + K
-            </span>
-
-            <span class="separator"></span>
-
-            <span>
-                SEARCH
-            </span>
-
-        </div>
-
     </div>
 
+    <!-- Main Dashboard -->
+    <div class="main-container">
+        <div class="tech-status-line">
+            SYSTEM ONLINE // <span>CYBER_NODE_READY</span>
+        </div>
 
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
+        <div class="search-card">
+            <select class="engine-select" id="engine" aria-label="Select Search Engine">
+                <option value="google">GOOGLE</option>
+                <option value="duckduckgo">DUCKDUCKGO</option>
+                <option value="bing">BING</option>
+            </select>
+            <input type="text" class="search-input" id="search" placeholder="Execute search query or URL..." autofocus autocomplete="off">
+        </div>
+
+        <button class="launch-btn" id="open-modal-btn">
+            <span>[ // LAUNCH NODES & CONFIG ]</span>
+        </button>
+    </div>
+
+    <!-- Launcher & Config Pop-up Modal -->
+    <div class="modal-overlay" id="shortcut-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">// SYSTEM_CONTROL_PANEL</span>
+                <button class="close-btn" id="close-modal-btn">✕</button>
+            </div>
+
+            <!-- Appearance Theme Switcher -->
+            <div class="theme-section-title">// APPEARANCE_THEME</div>
+            <div class="theme-buttons">
+                <button class="theme-btn" onclick="setTheme('dark')">Dark Mode</button>
+                <button class="theme-btn" onclick="setTheme('light')">Light Mode</button>
+                <button class="theme-btn" onclick="setTheme('cyan')">Cyan Pulse</button>
+                <button class="theme-btn" onclick="setTheme('maroon')">Maroon Cyber</button>
+            </div>
+
+            <!-- Pinned Shortcuts with Clean SVG Icons -->
+            <div class="theme-section-title">// PINNED_NODES</div>
+            <div class="popup-grid">
+                <a href="https://github.com" class="tech-tile">
+                    <div class="tile-left">
+                        <svg class="tile-icon" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        <span class="tile-name">GitHub</span>
+                    </div>
+                    <span class="tile-code">01</span>
+                </a>
+                <a href="https://reddit.com" class="tech-tile">
+                    <div class="tile-left">
+                        <svg class="tile-icon" viewBox="0 0 24 24"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701z"/></svg>
+                        <span class="tile-name">Reddit</span>
+                    </div>
+                    <span class="tile-code">02</span>
+                </a>
+                <a href="https://x.com" class="tech-tile">
+                    <div class="tile-left">
+                        <svg class="tile-icon" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        <span class="tile-name">X / Twitter</span>
+                    </div>
+                    <span class="tile-code">03</span>
+                </a>
+                <a href="https://google.com" class="tech-tile">
+                    <div class="tile-left">
+                        <svg class="tile-icon" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                        <span class="tile-name">Google</span>
+                    </div>
+                    <span class="tile-code">04</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-bar">
+        WEBPULSE MATRIX v3.0 • GUDOV OS
+    </div>
 
     <script>
+        // 1. Digital 3D Synthwave Particle Canvas Animation
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
 
+        let width, height;
+        const cols = 60;
+        const rows = 35;
+        let count = 0;
+        let waveColor = 'rgba(0, 240, 255, ';
 
-        /* =====================================================
-           ICONS
-        ===================================================== */
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        lucide.createIcons();
+        function renderWave() {
+            ctx.clearRect(0, 0, width, height);
+            const spaceX = width / cols;
+            const spaceY = height / rows;
 
+            for (let x = 0; x < cols; x++) {
+                for (let y = 0; y < rows; y++) {
+                    const scale = y / rows;
+                    const projY = scale * (height * 0.72) + (height * 0.28);
+                    const projX = (x - cols / 2) * (spaceX * scale) + (width / 2);
 
-        /* =====================================================
-           CLOCK SETTINGS
-        ===================================================== */
+                    const wave = Math.sin(count + x * 0.15 + y * 0.15) * 22 * scale;
+                    const alpha = (0.12 + scale * 0.65).toFixed(2);
 
-        let use24Hour = true;
-
-        let showSeconds = false;
-
-
-        const clock =
-            document.getElementById("clock");
-
-        const date =
-            document.getElementById("date");
-
-        const topTime =
-            document.getElementById("topTime");
-
-
-        function updateClock() {
-
-            const now = new Date();
-
-
-            let options = {
-
-                hour: "2-digit",
-
-                minute: "2-digit",
-
-                hour12: !use24Hour
-
-            };
-
-
-            if (showSeconds) {
-
-                options.second =
-                    "2-digit";
-
+                    ctx.fillStyle = `${waveColor}${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(projX, projY + wave, Math.max(0.7, scale * 2.4), 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
 
-
-            const time =
-                now.toLocaleTimeString(
-                    [],
-                    options
-                );
-
-
-            clock.textContent =
-                time;
-
-
-            topTime.textContent =
-                time;
-
-
-            date.textContent =
-                now.toLocaleDateString(
-                    [],
-                    {
-                        weekday: "short",
-                        month: "short",
-                        day: "2-digit",
-                        year: "numeric"
-                    }
-                ).toUpperCase();
-
+            count += 0.025;
+            requestAnimationFrame(renderWave);
         }
+        renderWave();
 
+        // 2. HUD Clock Update
+        function updateHUDClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('top-clock').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateHUDClock, 1000);
+        updateHUDClock();
 
-        updateClock();
-
-        setInterval(
-            updateClock,
-            1000
-        );
-
-
-        /* =====================================================
-           SEARCH
-        ===================================================== */
-
-        const searchForm =
-            document.getElementById(
-                "searchForm"
-            );
-
-
-        const searchInput =
-            document.getElementById(
-                "search"
-            );
-
-
-        const engine =
-            document.getElementById(
-                "engine"
-            );
-
+        // 3. Search Handler (Google, DuckDuckGo, Bing)
+        const searchInput = document.getElementById('search');
+        const engineSelect = document.getElementById('engine');
 
         const searchEngines = {
-
-            google:
-                "https://www.google.com/search?q=",
-
-            duckduckgo:
-                "https://duckduckgo.com/?q=",
-
-            bing:
-                "https://www.bing.com/search?q=",
-
-            youtube:
-                "https://www.youtube.com/results?search_query="
-
+            google: "https://www.google.com/search?q=",
+            duckduckgo: "https://duckduckgo.com/?q=",
+            bing: "https://www.bing.com/search?q="
         };
 
-
-        searchForm.addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const query =
-                    searchInput.value.trim();
-
-
-                if (!query) {
-
-                    searchInput.focus();
-
-                    return;
-
-                }
-
-
-                /*
-                 * Complete URL
-                 */
-
-                if (
-                    query.startsWith(
-                        "https://"
-                    ) ||
-                    query.startsWith(
-                        "http://"
-                    )
-                ) {
-
-                    window.location.href =
-                        query;
-
-                    return;
-
-                }
-
-
-                /*
-                 * Detect domains
-                 */
-
-                const isURL =
-                    /^[\w-]+(\.[\w-]+)+(\/.*)?$/i
-                        .test(query);
-
-
-                if (
-                    isURL &&
-                    !query.includes(" ")
-                ) {
-
-                    window.location.href =
-                        "https://" + query;
-
-                    return;
-
-                }
-
-
-                /*
-                 * Search engine
-                 */
-
-                const base =
-                    searchEngines[
-                        engine.value
-                    ];
-
-
-                window.location.href =
-                    base +
-                    encodeURIComponent(
-                        query
-                    );
-
-            }
-        );
-
-
-        /* =====================================================
-           CTRL + K
-        ===================================================== */
-
-        document.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    (event.ctrlKey ||
-                     event.metaKey) &&
-                    event.key.toLowerCase() === "k"
-                ) {
-
-                    event.preventDefault();
-
-                    searchInput.focus();
-
-                }
-
-            }
-        );
-
-
-        /* =====================================================
-           SETTINGS DRAWER
-        ===================================================== */
-
-        const settingsButton =
-            document.getElementById(
-                "settingsButton"
-            );
-
-
-        const drawer =
-            document.getElementById(
-                "settingsDrawer"
-            );
-
-
-        const closeSettings =
-            document.getElementById(
-                "closeSettings"
-            );
-
-
-        settingsButton.addEventListener(
-            "click",
-            function() {
-
-                drawer.classList.add(
-                    "open"
-                );
-
-            }
-        );
-
-
-        closeSettings.addEventListener(
-            "click",
-            function() {
-
-                drawer.classList.remove(
-                    "open"
-                );
-
-            }
-        );
-
-
-        /* =====================================================
-           24 HOUR TOGGLE
-        ===================================================== */
-
-        const formatToggle =
-            document.getElementById(
-                "formatToggle"
-            );
-
-
-        formatToggle.addEventListener(
-            "click",
-            function() {
-
-                use24Hour =
-                    !use24Hour;
-
-                this.classList.toggle(
-                    "active"
-                );
-
-                updateClock();
-
-            }
-        );
-
-
-        /* =====================================================
-           SECONDS TOGGLE
-        ===================================================== */
-
-        const secondsToggle =
-            document.getElementById(
-                "secondsToggle"
-            );
-
-
-        secondsToggle.addEventListener(
-            "click",
-            function() {
-
-                showSeconds =
-                    !showSeconds;
-
-                this.classList.toggle(
-                    "active"
-                );
-
-                updateClock();
-
-            }
-        );
-
-
-        /* =====================================================
-           SCAN ANIMATION
-        ===================================================== */
-
-        const scanToggle =
-            document.getElementById(
-                "scanToggle"
-            );
-
-
-        const scanline =
-            document.querySelector(
-                ".scanline"
-            );
-
-
-        scanToggle.addEventListener(
-            "click",
-            function() {
-
-                this.classList.toggle(
-                    "active"
-                );
-
-
-                if (
-                    this.classList.contains(
-                        "active"
-                    )
-                ) {
-
-                    scanline.style.display =
-                        "block";
-
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (!query) return;
+
+                const isUrl = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/.*)?$/i.test(query);
+
+                if (query.startsWith('http://') || query.startsWith('https://')) {
+                    window.location.href = query;
+                } else if (isUrl && !query.includes(' ')) {
+                    window.location.href = `https://${query}`;
                 } else {
-
-                    scanline.style.display =
-                        "none";
-
+                    const engine = engineSelect.value;
+                    const baseUrl = searchEngines[engine] || searchEngines.google;
+                    window.location.href = `${baseUrl}${encodeURIComponent(query)}`;
                 }
-
             }
-        );
+        });
 
+        // 4. Modal Launcher Controller
+        const modal = document.getElementById('shortcut-modal');
+        const openBtn = document.getElementById('open-modal-btn');
+        const closeBtn = document.getElementById('close-modal-btn');
 
-        /* =====================================================
-           GRAIN
-        ===================================================== */
+        openBtn.addEventListener('click', () => modal.classList.add('active'));
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
 
-        const grainToggle =
-            document.getElementById(
-                "grainToggle"
-            );
-
-
-        const noise =
-            document.querySelector(
-                ".noise"
-            );
-
-
-        grainToggle.addEventListener(
-            "click",
-            function() {
-
-                this.classList.toggle(
-                    "active"
-                );
-
-
-                noise.style.display =
-                    this.classList.contains(
-                        "active"
-                    )
-                        ? "block"
-                        : "none";
-
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
             }
-        );
+            if (e.key === 'Escape') modal.classList.remove('active');
+        });
 
+        // 5. Appearance Theme Switcher
+        function setTheme(theme) {
+            document.body.className = '';
+            if (theme === 'light') {
+                document.body.classList.add('theme-light');
+                waveColor = 'rgba(0, 102, 255, ';
+            } else if (theme === 'maroon') {
+                document.body.classList.add('theme-maroon');
+                waveColor = 'rgba(255, 0, 85, ';
+            } else if (theme === 'cyan') {
+                waveColor = 'rgba(0, 240, 255, ';
+            } else {
+                document.body.classList.add('theme-dark');
+                waveColor = 'rgba(0, 240, 255, ';
+            }
+        }
 
-        /* =====================================================
-           BACKGROUND THEMES
-        ===================================================== */
-
-        const themeButtons =
-            document.querySelectorAll(
-                ".theme-button"
-            );
-
-
-        themeButtons.forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    function() {
-
-                        themeButtons.forEach(
-                            b =>
-                                b.classList.remove(
-                                    "selected"
-                                )
-                        );
-
-
-                        this.classList.add(
-                            "selected"
-                        );
-
-
-                        const theme =
-                            this.dataset.theme;
-
-
-                        if (
-                            theme === "midnight"
-                        ) {
-
-                            document.body.style.backgroundImage =
-                                `
-                                linear-gradient(
-                                    rgba(2,7,14,.82),
-                                    rgba(2,7,14,.92)
-                                ),
-                                url("assets/background.jpg")
-                                `;
-
-                        }
-
-
-                        else if (
-                            theme === "blue"
-                        ) {
-
-                            document.body.style.backgroundImage =
-                                `
-                                linear-gradient(
-                                    rgba(0,25,45,.55),
-                                    rgba(2,7,14,.75)
-                                ),
-                                url("assets/background.jpg")
-                                `;
-
-                        }
-
-
-                        else {
-
-                            document.body.style.backgroundImage =
-                                `
-                                linear-gradient(
-                                    90deg,
-                                    rgba(2,7,14,.62),
-                                    rgba(2,7,14,.20),
-                                    rgba(2,7,14,.55)
-                                ),
-                                linear-gradient(
-                                    0deg,
-                                    rgba(2,7,14,.78),
-                                    transparent 55%,
-                                    rgba(2,7,14,.25)
-                                ),
-                                url("assets/background.jpg")
-                                `;
-
-                        }
-
+        // 6. Geolocation Weather
+        async function fetchWeather() {
+            try {
+                const geoRes = await fetch('https://ipapi.co/json/');
+                const geoData = await geoRes.json();
+                
+                if (geoData.latitude && geoData.longitude) {
+                    const weatherRes = await fetch(
+                        `https://api.open-meteo.com/v1/forecast?latitude=${geoData.latitude}&longitude=${geoData.longitude}&current_weather=true`
+                    );
+                    const weatherData = await weatherRes.json();
+                    
+                    if (weatherData.current_weather) {
+                        const temp = Math.round(weatherData.current_weather.temperature);
+                        document.getElementById('weather-temp').innerText = `${temp}°C`;
+                        document.getElementById('weather-city').innerText = (geoData.city || 'LOCAL_NODE').toUpperCase();
                     }
-                );
-
+                }
+            } catch (err) {
+                document.getElementById('weather-city').innerText = 'OFFLINE_NODE';
             }
-        );
-
-
+        }
+        fetchWeather();
     </script>
-
 </body>
-
 </html>
